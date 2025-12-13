@@ -51,14 +51,14 @@ Expected Output: The console will show "Uploading stream_matches_2025...".
 
 Verification: Go to Azure Portal -> Storage Account -> data/bronze to see the new files appearing in real-time.
 
-##⚙️ Azure Data Factory Pipeline (Batch Ingestion)
+## ⚙️ Azure Data Factory Pipeline (Batch Ingestion)
 The adf_pipeline_ingestion.json file contains the definition for the PL_Ingest_Kaggle_To_Bronze pipeline.
 
-Source: Local Landing Zone (or Kaggle raw files).
+**Source:** Local Landing Zone (or Kaggle raw files).
 
-Destination: Azure Data Lake Gen2 (bronze/ folder).
+**Destination:** Azure Data Lake Gen2 (bronze/ folder).
 
-Logic: Copies all .csv files using a Wildcard path.
+**Logic:** Copies all .csv files using a Wildcard path.
 
 To Import this pipeline:
 
