@@ -2,11 +2,12 @@ import time
 import pandas as pd
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 from azure.storage.filedatalake import DataLakeServiceClient
 
 # CONFIGURATION
-STORAGE_ACCOUNT_NAME = "dota2lakehouse"  # Storage Account Name
-STORAGE_ACCOUNT_KEY = "xxx"   # Access Key
+STORAGE_ACCOUNT_NAME = "dota2lakehousenew"  # Storage Account Name
+STORAGE_ACCOUNT_KEY = os.getenv("AZURE_STORAGE_ACCOUNT_KEY")  # Load from .env file for security
 CONTAINER_NAME = "data"
 DIRECTORY_NAME = "bronze"                  # The folder where streamed files will land
 LOCAL_SOURCE_FILE = "main_metadata.csv"

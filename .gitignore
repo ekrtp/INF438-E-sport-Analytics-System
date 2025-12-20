@@ -1,0 +1,11 @@
+# Add these entries to .gitignore to prevent committing sensitive data
+.env
+*.pyc
+__pycache__/
+.DS_Store
+*.log
+
+# Data files - large CSV files (download from Kaggle)
+data/
+# If you need to track the data folder structure but not the files:
+# data/*.csv

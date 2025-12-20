@@ -1,2 +1,4 @@
 azure-storage-file-datalake
 pandas
+python-dotenv
+pyarrow
