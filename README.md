@@ -68,6 +68,25 @@ Click New Pipeline -> Import from template/code.
 
 Paste the contents of the JSON file.
 
+## 📊 Sample Data Files (Exemples de fichiers de chaque couche)
+
+CSV sample files from each Lakehouse layer are provided in the `/samples` folder to demonstrate data structure and transformations.
+
+**Silver Layer Samples** (1,000 rows each):
+- `silver_cleaned_matches_sample_1000rows_YYYYMMDD.csv`
+- `silver_cleaned_players_sample_1000rows_YYYYMMDD.csv`
+- `silver_cleaned_picks_bans_sample_1000rows_YYYYMMDD.csv`
+
+**Gold Layer Samples**:
+- `gold_player_stats_complete_XXXXrows_YYYYMMDD.csv` (all player stats)
+- `gold_hero_stats_complete_XXXrows_YYYYMMDD.csv` (all hero stats)
+- `gold_daily_stats_complete_XXXrows_YYYYMMDD.csv` (all daily stats)
+- `gold_ml_features_sample_5000rows_YYYYMMDD.csv` (stratified ML sample)
+
+These samples are generated when running `scripts/bronze_to_silver.ipynb` and `scripts/silver_to_gold.ipynb` notebooks.
+
+---
+
 ## 👥 Team Responsibilities
 Member 1 (Infrastructure): Azure Setup, Streaming Script, Batch Ingestion (Bronze).
 
