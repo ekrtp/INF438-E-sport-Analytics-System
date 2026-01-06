@@ -14,11 +14,46 @@ This project implements a Data Lakehouse architecture on Microsoft Azure to anal
 
 ## 📂 Repository Structure
 
-| File | Description |
-| :--- | :--- |
-| `stream_simulation.py` | Python script that reads local CSV data and streams it to Azure ADLS Gen2 in mini-batches. |
-| `adf_pipeline_ingestion.json` | The Azure Data Factory pipeline code for ingesting historical batch data. |
-| `requirements.txt` | Python dependencies required to run the simulation. |
+### Core Components
+
+| Directory/File | Description |
+|:---------------|:------------|
+| `adf_pipelines/` | Azure Data Factory pipeline definitions (4 files) |
+| `notebooks/` | Databricks notebooks for data transformation (5 notebooks) |
+| `scripts/` | Python utilities and streaming simulation |
+| `data/` | Source CSV files (gitignored - download from Kaggle) |
+| `samples/` | Sample outputs from Silver and Gold layers |
+| `Document/` | Project documentation, reports, and architecture diagrams |
+| `screenshots/` | Setup documentation and Power BI visualizations |
+| `requirements.txt` | Python dependencies |
+
+### Detailed File Breakdown
+
+**Azure Data Factory Pipelines** (`adf_pipelines/`)
+- `adf_pipeline_ingestion.json` - Batch ingestion from Kaggle to Bronze layer
+- `pl_master_esports.json` - Master orchestration pipeline
+- `pl_transform_silver.json` - Bronze to Silver transformation pipeline
+- `pl_aggregate_gold` - Silver to Gold aggregation pipeline
+
+**Databricks Notebooks** (`notebooks/`)
+- `setup_connection.ipynb` - Azure Databricks connection and mount setup
+- `bronze_to_silver.ipynb` - Data cleaning and Delta table creation
+- `silver_to_gold.ipynb` - Aggregation and analytics table creation
+- `sql_analysis.ipynb` - SQL queries for insights and analytics
+- `04_ml_model.ipynb` - Machine learning model for match outcome prediction
+
+**Scripts** (`scripts/`)
+- `stream_simulator.py` - Simulates real-time match data streaming to Azure ADLS Gen2
+
+**Sample Data** (`samples/`)
+- `samples_silver/` - 1,000-row samples of cleaned data (matches, players, picks_bans)
+- `samples_gold/` - Complete aggregated datasets (player stats, hero stats, daily stats, ML features)
+
+**Documentation** (`Document/`)
+- `rapport_final.pdf` - Final project report
+- `INF438PdS_G3.pdf` - Project specification document
+- `pipeline.png` - Data lakehouse architecture diagram
+- `Screenshots/` - Power BI dashboard screenshots and implementation evidence
 
 ---
 
@@ -33,7 +68,7 @@ pip install azure-storage-file-datalake pandas
 ```
 
 ### 2. Configuration
-Open stream_simulation.py and update the following variables with your Azure credentials:
+Open `scripts/stream_simulator.py` and update the following variables with your Azure credentials:
 
 ```Python
 STORAGE_ACCOUNT_NAME = "sadota2lakehouse"
@@ -45,14 +80,14 @@ LOCAL_SOURCE_FILE = "main_metadata.csv"
 Run the script in your terminal:
 
 ```Bash
-python stream_simulation.py
+python scripts/stream_simulator.py
 ```
 Expected Output: The console will show "Uploading stream_matches_2025...".
 
 Verification: Go to Azure Portal -> Storage Account -> data/bronze to see the new files appearing in real-time.
 
 ## ⚙️ Azure Data Factory Pipeline (Batch Ingestion)
-The adf_pipeline_ingestion.json file contains the definition for the PL_Ingest_Kaggle_To_Bronze pipeline.
+The `adf_pipelines/adf_pipeline_ingestion.json` file contains the definition for the PL_Ingest_Kaggle_To_Bronze pipeline.
 
 **Source:** Local Landing Zone (or Kaggle raw files).
 
@@ -83,7 +118,21 @@ CSV sample files from each Lakehouse layer are provided in the `/samples` folder
 - `gold_daily_stats_complete_XXXrows_YYYYMMDD.csv` (all daily stats)
 - `gold_ml_features_sample_5000rows_YYYYMMDD.csv` (stratified ML sample)
 
-These samples are generated when running `scripts/bronze_to_silver.ipynb` and `scripts/silver_to_gold.ipynb` notebooks.
+These samples are generated when running notebooks in the `notebooks/` directory (`bronze_to_silver.ipynb` and `silver_to_gold.ipynb`).
+
+---
+
+## 🔄 Data Transformation Workflow
+
+Run notebooks in the following order:
+
+1. `notebooks/setup_connection.ipynb` - Configure Azure storage mount
+2. `notebooks/bronze_to_silver.ipynb` - Clean and deduplicate raw data
+3. `notebooks/silver_to_gold.ipynb` - Create aggregated analytics tables
+4. `notebooks/sql_analysis.ipynb` - Run analytical queries
+5. `notebooks/04_ml_model.ipynb` - Train match prediction model
+
+**Power BI Dashboard:** Connect to Gold layer Delta tables or use exported samples from `samples/samples_gold/`
 
 ---
 

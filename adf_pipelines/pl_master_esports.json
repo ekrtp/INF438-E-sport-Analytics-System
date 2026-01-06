@@ -1,0 +1,49 @@
+{
+    "name": "pl_master_esports",
+    "properties": {
+        "activities": [
+            {
+                "name": "exec_silver",
+                "type": "ExecutePipeline",
+                "dependsOn": [],
+                "policy": {
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pl_transform_silver",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "exec_gold",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "exec_silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pl_aggregate_gold",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2025-12-20T22:38:21Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

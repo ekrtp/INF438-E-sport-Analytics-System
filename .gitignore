@@ -9,3 +9,17 @@ __pycache__/
 data/
 # If you need to track the data folder structure but not the files:
 # data/*.csv
+
+# Large binary files - Power BI reports
+*.pbix
+*.pbit
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Additional OS files
+Thumbs.db
