@@ -23,3 +23,14 @@ data/
 
 # Additional OS files
 Thumbs.db
+
+# LaTeX build artifacts
+Document/ReportVersions/*.out
+Document/ReportVersions/*.aux
+Document/ReportVersions/*.log
+Document/ReportVersions/*.toc
+Document/ReportVersions/*.lot
+Document/ReportVersions/*.lof
+Document/ReportVersions/*.fls
+Document/ReportVersions/*.fdb_latexmk
+Document/ReportVersions/*.synctex.gz
