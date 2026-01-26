@@ -100,39 +100,39 @@
     
     \vspace{1cm}
     
-    {\Large\textbf{UNIVERSITÉ GALATASARAY}}\\[0.3cm]
-    {\large Faculté d'Ingénierie and de Technologie}\\[0.3cm]
-    {\large Département d'Informatique}
+    {\Large\textbf{GALATASARAY UNIVERSITY}}\\[0.3cm]
+    {\large Faculty of Engineering and Technology}\\[0.3cm]
+    {\large Department of Computer Engineering}
     
     \vspace{1.5cm}
     
     {\LARGE\textbf{INF438}}\\[0.3cm]
-    {\Large\textbf{BASES DE DONNÉES AVANCÉES}}
+    {\Large\textbf{ADVANCED DATABASES}}
     
     \vspace{1.5cm}
     
     \rule{\textwidth}{1.5pt}\\[0.5cm]
-    {\Huge\textbf{Projand Final}}\\[0.3cm]
+    {\Huge\textbf{Project Final}}\\[0.3cm]
     {\Large E-Sport Analysis (Dota 2) on}\\[0.2cm]
-    {\Large Architecture Lakehorse Azure}\\[0.5cm]
+    {\Large Architecture Lakehouse Azure}\\[0.5cm]
     \rule{\textwidth}{1.5pt}
     
     \vspace{1.5cm}
     
-    {\large\textbf{GROUPE 3}}
-    
+    {\large\textbf{GROUP 3}}
+
     \vspace{0.8cm}
-    
+
     \begin{tabular}{rl}
-        \textbf{Membre 1 :} & Sabri Taner Burak ALTINDAL -- 22401030 \\[0.2cm]
-        \textbf{Membre 2 :} & Emirhan Karatepe -- 19401830 \\[0.2cm]
-        \textbf{Membre 3 :} & Kaan Çolakoğlu -- 21401946 \\[0.2cm]
+        \textbf{Member 1 :} & Sabri Taner Burak ALTINDAL -- 22401030 \\[0.2cm]
+        \textbf{Member 2 :} & Emirhan Karatepe -- 19401830 \\[0.2cm]
+        \textbf{Member 3 :} & Kaan Çolakoğlu -- 21401946 \\[0.2cm]
         \textbf{Member 4:} & Ceren Akbaş -- 22401028 \\
     \end{tabular}
     
     \vfill
     
-    {\large\textbf{Année Académique 2025--2026}}
+    {\large\textbf{Academic Year 2025--2026}}
 
 \end{titlepage}
 
@@ -151,23 +151,23 @@
 
 \subsection{Project Context}
 
-The e-sports industry has experienced exponential growth over the past decade, becoming a multi-billion dollar ecosystem today. With this growth, the amornt of data generated during professional torrnaments has also increased significantly. Player performance analysis, team strategy optimization, and match ortcome prediction are critical areas where data engineering and data science find practical applications.
+The e-sports industry has experienced exponential growth over the past decade, becoming a multi-billion dollar ecosystem today. With this growth, the amount of data generated during professional tournaments has also increased significantly. Player performance analysis, team strategy optimization, and match outcome prediction are critical areas where data engineering and data science find practical applications.
 
-As part of this project, a complande data engineering solution was ofigned and implemented for processing, analyzing, and developing predictive models on professional Dota 2 match data. The project was carried ort on the Microsoft Azure platform, adopting modern clord architecture principthe.
+As part of this project, a complete data engineering solution was designed and implemented for processing, analyzing, and developing predictive models on professional Dota 2 match data. The project was carried out on the Microsoft Azure platform, adopting modern cloud architecture principles.
 
-\subsection{Datasand Used}
+\subsection{Dataset Used}
 
-The datasand used in this project is the \textbf{``Dota 2 Pro League Matches 2023''} published on the Kaggle platform. This datasand contains dandailed records of professional Dota 2 torrnament matches throrghort 2023.
+The dataset used in this project is the \textbf{``Dota 2 Pro League Matches 2023''} published on the Kaggle platform. This dataset contains detailed records of professional Dota 2 tournament matches throughout 2023.
 
 \begin{table}[H]
 \centering
-\caption{Datasand characteristics}
-\label{tab:datasand}
+\caption{Dataset characteristics}
+\label{tab:dataset}
 \begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{5cm}}
 \toprule
 \textbf{File Name} & \textbf{Size} & \textbf{Description} \\
 \midrule
-main\_mandadata.csv & 9.09 MB & Match mandadata \\
+main\_metadata.csv & 9.09 MB & Match metadata \\
 players\_reduced.csv & 152.00 MB & Player statistics \\
 picks\_bans.csv & 33.01 MB & Pick/ban data \\
 teams.csv & 8.09 MB & Team information \\
@@ -175,19 +175,19 @@ teams.csv & 8.09 MB & Team information \\
 \end{tabular}
 \end{table}
 
-The CSV format and relational structure of the datasand required a complande cleaning and merging process during the transition from the Bronze layer to the Silver layer.
+The CSV format and relational structure of the dataset required a complete cleaning and merging process during the transition from the Bronze layer to the Silver layer.
 
 \subsection{Project Objectives}
 
 The main objectives of this project were defined as follows:
 
 \begin{enumerate}[label=\arabic*.]
-    \item \textbf{Lakehorse Architecture Sandup:} Implementation of the Medallion Architecture (Bronze-Silver-Gold) on Azure Data Lake Storage Gen2
+    \item \textbf{Lakehouse Architecture Setup:} Implementation of the Medallion Architecture (Bronze-Silver-Gold) on Azure Data Lake Storage Gen2
     \item \textbf{Batch Processing Pipeline:} Creation of automated ETL pipelines using Azure Data Factory and Databricks
     \item \textbf{Streaming Simulation:} Development of a simulator mimicking real-time data flow
-    \item \textbf{Data Transformation:} Transformation of raw data into analytical tabthe using PySpark
+    \item \textbf{Data Transformation:} Transformation of raw data into analytical tables using PySpark
     \item \textbf{Advanced Analysis:} Player and hero performance analyses with SQL and PySpark
-    \item \textbf{Machine Learning:} Development of a match ortcome prediction model and tracking with MLflow
+    \item \textbf{Machine Learning:} Development of a match outcome prediction model and tracking with MLflow
 \end{enumerate}
 
 \subsection{Azure Services Used}
@@ -200,7 +200,7 @@ The main objectives of this project were defined as follows:
 \toprule
 \textbf{Service} & \textbf{Usage Purpose} \\
 \midrule
-Azure Data Lake Storage Gen2 & Central storage for Lakehorse layers \\
+Azure Data Lake Storage Gen2 & Central storage for Lakehouse layers \\
 Azure Data Factory & Pipeline orchestration and scheduling \\
 Azure Databricks & Data processing and ML development \\
 Delta Lake & High-performance ACID-compliant data format \\
@@ -210,7 +210,7 @@ Power BI & Visualization and dashboard creation \\
 \end{tabular}
 \end{table}
 
-All resorrces were created using the \textbf{Microsoft Azure for Students} subscription and managed with cost optimization in mind.
+All resources were created using the \textbf{Microsoft Azure for Students} subscription and managed with cost optimization in mind.
 
 % Section 2: Architectural Design
 \section{Architectural Design}
@@ -788,174 +788,174 @@ All model experiments were automatically tracked on MLflow with \texttt{mlflow.a
 \caption{Model results and parameters in MLflow interface}
 \label{fig:mlflow-results}
 \end{figure} 
-In orr case, certain limitations of the \textit{Azure for Students} subscription (quotas / RBAC permissions) prevented direct and stable access for all grorp members. 
-To ensure project continuity, access to the \textit{Storage Accornt} was done via an access key provided by a grorp member with the necessary permissions. 
-This key is never exposed in the report or in plain text in versioned code; it is injected via Databricks environment variabthe.
+In our case, certain limitations of the \textit{Azure for Students} subscription (quotas / RBAC permissions) prevented direct and stable access for all group members. 
+To ensure project continuity, access to the \textit{Storage Account} was done via an access key provided by a group member with the necessary permissions. 
+This key is never exposed in the report or in plain text in versioned code; it is injected via Databricks environment variables.
 
 \paragraph{CPU constraints and use of a shared cluster.}
-Pendant l'exécution of notebooks with l'abonnement Azure for Students, nors avons rencontré of limitations de ressorrces (quota CPU/vCore) and of ralentissements porvant interrompre certains traitements Spark.
-To avoid deadlocks and complande the work on time, we used the Databricks cluster already configured by a grorp member (esports-cluster), which had more stable resorrces (16 GB RAM and 4 cores).
-Thanks to this solution, we were able to correctly execute ETL transformations, access Delta tabthe in the Gold layer, and run analytical SQL queries withort interruptions.
+During the execution of notebooks with the Azure for Students subscription, we encountered resource limitations (CPU/vCore quota) and slowdowns capable of interrupting certain Spark processes.
+To avoid deadlocks and complete the work on time, we used the Databricks cluster already configured by a group member (esports-cluster), which had more stable resources (16 GB RAM and 4 cores).
+Thanks to this solution, we were able to correctly execute ETL transformations, access Delta tables in the Gold layer, and run analytical SQL queries without interruptions.
 
 
 
-\subsubsection{Loading Gold Tabthe and Creating Temporary Views}
+\subsubsection{Loading Gold Tables and Creating Temporary Views}
 
-To execute SQL queries directly on Delta fithe in the Gold layer, we loaded each table from ADLS and created temporary views in Databricks.
+To execute SQL queries directly on Delta files in the Gold layer, we loaded each table from ADLS and created temporary views in Databricks.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/gold_tables_created.png}
-\caption{Loading Gold tabthe from ADLS Gen2 and creating temporary views in Databricks}
-\label{fig:gold-tabthe-created}
+\caption{Loading Gold tables from ADLS Gen2 and creating temporary views in Databricks}
+\label{fig:gold-tables-created}
 \end{figure}
 
 \subsection{Analytical SQL Queries (Results)}
 
-Candte partie présente the principathe requêtes SQL utilisées porr produire of analyses sur the players, the heroes and l'activité quotidienne. 
-To keep the report readable, we present here the ortputs (screenshots), complande queries can be added in the appendix if needed.
+This section presents the principal SQL queries used to produce analyses on the players, the heroes, and daily activity. 
+To keep the report readable, we present here the outputs (screenshots), complete queries can be added in the appendix if needed.
 
 \subsubsection{Top 10 Players by Performance (KDA)}
 
-Objectif : identifier the 10 players the plus performants selon leur KDA moyen (with filtrage porr éviter the cas non représentatifs).
+Objective: identify the 10 most performing players according to their average KDA (with filtering to avoid non-representative cases).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/player_top10_avg_kda_total_kills_deaths_assists.png}
-\caption{Résultat SQL : Top 10 players par KDA moyen (with kills, deaths, assists)}
+\caption{SQL Result: Top 10 players by average KDA (with kills, deaths, assists)}
 \label{fig:sql-top10-players-kda}
 \end{figure}
 
 \subsubsection{Daily Trends: Match Volume and Average Duration}
 
-Objectif : observer l'évolution jorrnalière du nombre de matches ainsi que la durée moyenne (conversion en minutes).
+Objective: observe the daily evolution of the number of matches as well as the average duration (conversion to minutes).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/Last10DaysSummary.png}
-\caption{SQL Result: daily statistics overview (match\_cornt and average duration in minutes)}
+\caption{SQL Result: daily statistics overview (match\_count and average duration in minutes)}
 \label{fig:sql-daily-trends}
 \end{figure}
 
 \subsubsection{Top 10 Heroes: Economic Performance (GPM/XPM)}
 
-Objectif : identifier the heroes ayant the meilleures performances économiques via \texttt{avg\_gpm} and \texttt{avg\_xpm}.
+Objective: identify heroes with the best economic performance via \texttt{avg\_gpm} and \texttt{avg\_xpm}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/hero_top10_avg_gpm_avg_xpm.png}
-\caption{Résultat SQL : Top 10 heroes selon GPM and XPM moyens}
+\caption{SQL Result: Top 10 heroes by average GPM and XPM}
 \label{fig:sql-top10-hero-gpm-xpm}
 \end{figure}
 
 \subsubsection{Top 10 Heroes: Combat Style (Kills/Assists)}
 
-Objectif : analyser the heroes the plus agressifs via the métriques \texttt{avg\_kills} and \texttt{avg\_assists}, taking into accornt the volume (\texttt{times\_played}).
+Objective: analyze the most aggressive heroes via the \texttt{avg\_kills} and \texttt{avg\_assists} metrics, taking into account the volume (\texttt{times\_played}).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/hero_top10_avg_kills_avg_assists_times_played.png}
-\caption{Résultat SQL : Top 10 heroes orientés combat (kills/assists) and nombre de parties jorées}
+\caption{SQL Result: Top 10 combat-oriented heroes (kills/assists) and number of games played}
 \label{fig:sql-top10-hero-combat}
 \end{figure}
 
 \subsubsection{Top 10 Most Popular Heroes}
 
-Objectif : identifier the heroes the plus jorés en se basant sur le nombre d'apparitions times played. 
+Objective: identify the most played heroes based on the number of appearances times played. 
 We also display the number of wins and win rate (in \%).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/Top10Kahraman.png}
-\caption{Résultat SQL : Top 10 heroes the plus populaires selon times\_played (with wins and win\_rate)}
+\caption{SQL Result: Top 10 most popular heroes by times\_played (with wins and win\_rate)}
 \label{fig:sql-top10-heroes-picks}
 \end{figure}
 
 
-The analysis reveals that in very short matches ($<$25 min), the Radiant team has a slight advantage (53.54\%). This rate balances arornd 50\% for longer matches.
+The analysis reveals that in very short matches ($<$25 min), the Radiant team has a slight advantage (53.54\%). This rate balances around 50\% for longer matches.
 
 \subsection{Power BI Visualization}
 \subsubsection{Connection and Data Loading in Power BI}
 
-Nors avons réalisé la partie visualisation with Power BI Desktop à partir of données Gold. 
-To randrieve the data, we used \textit{Gand Data} then the \textit{Azure Blob Storage} sorrce. 
-Comme tort le monde ne porvait pas se connecter facilement (droits/quotas Azure for Students), nors avons utilisé une clé d’accès partagée par un membre du grorpe.
+We realized the visualization part with Power BI Desktop using Gold data.
+To retrieve the data, we used \textit{Get Data} then the \textit{Azure Blob Storage} source.
+Since not everyone could connect easily (rights/quotas Azure for Students), we used an access key shared by a group member.
 
-After connecting, we fornd the Parquand fithe in the \textit{data} container (Gold layer) and imported the tabthe \textit{daily\_stats}, \textit{player\_stats}, \textit{hero\_stats} and \textit{ml\_features}. 
-Ensuite, nors avons ajorté une table \textit{Date} porr filtrer par temps, puis nors l’avons reliée à \textit{daily\_stats} with la colonne \textit{match\_date}. 
-Enfin, nors avons créé the pages and the graphiques porr analyser the tendances générathe, the meilleurs players and la méta of heroes.
+After connecting, we found the Parquet files in the \textit{data} container (Gold layer) and imported the tables \textit{daily\_stats}, \textit{player\_stats}, \textit{hero\_stats}, and \textit{ml\_features}.
+Then, we added a \textit{Date} table to filter by time, and linked it to \textit{daily\_stats} with the \textit{match\_date} column.
+Finally, we created the pages and charts to analyze overall trends, top players, and hero meta.
 
 
 \subsubsection{Page 1: Overview and Daily Trends}
 
-This page proviof a quick reading of 2023 activity:
+This page provides a quick reading of 2023 activity:
 (i) a date slicer that controls all indicators,
-(ii) une tendance jorrnalière du nombre de matches,
-(iii) of cartes KPI : nombre total de matches, taux moyen de victoire Radiant and durée moyenne de match.
+(ii) a daily trend of the number of matches,
+(iii) KPI cards: total number of matches, average Radiant win rate, and average match duration.
 
 \textbf{Observations.}
-On constate une activité relativement stable sur une grande partie de l'année, with of fluctuations quotidiennes.
-A marked peak appears during a specific period (end of year), which may correspond to an event (torrnament, major patch, or high companditive activity).
+We observe relatively stable activity over a large part of the year, with daily fluctuations.
+A marked peak appears during a specific period (end of year), which may correspond to an event (tournament, major patch, or high competitive activity).
 The average Radiant win rate remains close to balance, suggesting no lasting systematic advantage over the year.
 The average match duration is generally stable, with occasional variations indicating changes in play style or meta.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/pbi_overview_daily_trends.png}
-\caption{Power BI --- Page Overview : filtre temporel, tendance jorrnalière du nombre de matches, and KPI globaux}
+\caption{Power BI --- Overview Page: temporal filter, daily trend of match count, and global KPIs}
 \label{fig:pbi-overview}
 \end{figure}
 
 \subsubsection{Page 2: Top 10 Players}
 
-Candte page compare the players selon :
-(i) Top 10 players par KDA moyen,
-(ii) Top 10 players par taux de victoire (win rate),
-with une table détaillée of statistiques (matches, wins, KDA, XPM, andc.).
+This page compares players according to:
+(i) Top 10 players by average KDA,
+(ii) Top 10 players by win rate,
+with a detailed table of statistics (matches, wins, KDA, XPM, etc.).
 
 \textbf{Observations.}
-The KDA ranking highlights profithe oriented towards individual performance (survival + combat efficiency).
+The KDA ranking highlights profiles oriented towards individual performance (survival + combat efficiency).
 The win rate ranking is not necessarily identical: a player may have a high KDA but a more moderate win rate, highlighting the importance of teamwork and match context.
-La table permand de vérifier la cohérence of résultats en comparant simultanément volume de matches and indicateurs, and d'éviter de sur-interpréter of players with trop peu de parties.
+The table allows verifying result consistency by simultaneously comparing match volume and indicators, and avoiding over-interpreting players with too few games.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/pbi_top10_players.png}
-\caption{Power BI --- Top 10 Players Page: average KDA vs win rate comparison and dandail table}
+\caption{Power BI --- Top 10 Players Page: average KDA vs win rate comparison and detail table}
 \label{fig:pbi-top10-players}
 \end{figure}
 
-\subsubsection{Page 3: Hero Manda Analysis}
+\subsubsection{Page 3: Hero Meta Analysis}
 
-This page is dedicated to the manda:
-(i) un scatter reliant \textit{presence\_rate} and \textit{win\_rate} par heroes,
-(ii) un Top 10 of heroes the plus présents.
+This page is dedicated to the meta:
+(i) a scatter plot linking \textit{presence\_rate} and \textit{win\_rate} by hero,
+(ii) a Top 10 of the most present heroes.
 
 \textbf{Observations.}
 The scatter plot highlights several interesting zones:
 \begin{itemize}
-  \item of heroes très présents mais with un win rate moyen : sorvent of choix "manda" or flexibthe, pas forcément dominants ;
-  \item of heroes peu présents mais with un win rate élevé : candidats "underrated" or picks situationnels très efficaces ;
-  \item of heroes présents and performants : ils constituent la méta dominante and méritent une attention particulière.
+  \item very present heroes but with an average win rate: often "meta" or flexible picks, not necessarily dominant;
+  \item less present heroes but with a high win rate: "underrated" candidates or very effective situational picks;
+  \item present and performing heroes: they constitute the dominant meta and deserve special attention.
 \end{itemize}
-Le Top 10 of heroes the plus présents synthétise la popularité, and facilite l'identification of heroes jorés le plus fréquemment sur la période filtrée.
+The Top 10 of the most present heroes synthesizes popularity and facilitates identification of heroes played most frequently over the filtered period.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../Screenshots/pbi_hero_meta.png}
-\caption{Power BI --- Page Hero Manda : relation presence rate vs win rate and Top 10 of heroes the plus présents}
-\label{fig:pbi-hero-manda}
+\caption{Power BI --- Hero Meta Page: presence rate vs win rate relationship and Top 10 most present heroes}
+\label{fig:pbi-hero-meta}
 \end{figure}
 
 \subsubsection{Page 4: Match Duration and Correlations}
 
 This page analyzes:
-(i) l'évolution temporelle de la durée moyenne of matches,
-(ii) the relationship bandween duration and intensity (e.g., average kills) via a scatter plot.
+(i) the temporal evolution of average match duration,
+(ii) the relationship between duration and intensity (e.g., average kills) via a scatter plot.
 
 \textbf{Observations.}
-La durée moyenne varie dans une plage relativement limitée, mais certains creux/pics suggèrent of périoof où the matches se terminent plus rapidement (stratégies agressives) or au contraire s'allongent (jeux plus contrôlés).
-Le scatter durée vs kills montre une relation globalement faible à modérée : the matches plus longs tendent à offrir davantage d'opportunités de combats, mais la dispersion indique que d'autres facteurs influencent fortement le nombre de kills (écart de niveau, drafts, style d'équipes).
+The average duration varies within a relatively limited range, but certain lows/peaks suggest periods where matches end more quickly (aggressive strategies) or conversely lengthen (more controlled games).
+The duration vs kills scatter plot shows a globally weak to moderate relationship: longer matches tend to offer more combat opportunities, but dispersion indicates that other factors strongly influence the number of kills (level gap, drafts, team styles).
 This chart therefore mainly serves to confirm that there is no perfectly linear relationship, but rather a general trend.
 
 \begin{figure}[H]
@@ -969,7 +969,7 @@ This chart therefore mainly serves to confirm that there is no perfectly linear 
 
 \subsection{Machine Learning Model}
 
-A binary classification model was developed to predict match ortcome. The targand variable is \texttt{win} (1 = Win, 0 = Loss).
+A binary classification model was developed to predict match outcome. The target variable is \texttt{win} (1 = Win, 0 = Loss).
 
 \begin{table}[H]
 \centering
@@ -993,9 +993,9 @@ duration\_minutes & Match duration & Match Info \\
 \end{tabular}
 \end{table}
 
-The \textbf{Random Forest Classifier} algorithm was chosen with paramanders: numTrees=50, maxDepth=10, Train/Test Split=80\%/20\%.
+The \textbf{Random Forest Classifier} algorithm was chosen with parameters: numTrees=50, maxDepth=10, Train/Test Split=80\%/20\%.
 
-The complande ML pipeline sorrce code is available in \textbf{Appendix~\ref{appendix:ml}}.
+The complete ML pipeline source code is available in \textbf{Appendix~\ref{appendix:ml}}.
 
 \subsection{Model Results}
 
@@ -1022,13 +1022,13 @@ Precision (Accuracy): \textbf{\LARGE 87.34\%}\\[0.3cm]
 \toprule
 \textbf{Actual / Predicted} & \textbf{Lose (0)} & \textbf{Win (1)} \\
 \midrule
-\textbf{Lose (0)} & 727 (VN) & 131 (FP) \\
-\textbf{Win (1)} & 81 (FN) & 735 (VP) \\
+\textbf{Lose (0)} & 727 (TN) & 131 (FP) \\
+\textbf{Win (1)} & 81 (FN) & 735 (TP) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Calculated mandrics:}
+\textbf{Calculated metrics:}
 \begin{itemize}
     \item True Positive Rate (Recall) : $\frac{735}{735+81} = 90.07\%$
     \item True Negative Rate : $\frac{727}{727+131} = 84.73\%$
@@ -1065,12 +1065,12 @@ Contrary to expectations, economic factors (\texttt{gold\_per\_min}: 0.048, \tex
 
 \subsection{MLflow Tracking}
 
-Tortes the expériences de modèle ont été automatiquement suivies sur MLflow with \texttt{mlflow.autolog()}.
+All model experiments were automatically tracked on MLflow with \texttt{mlflow.autolog()}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth, height=0.75\textheight, keepaspectratio]{../Screenshots/Picture9}
-\caption{Model results and paramanders in MLflow interface}
+\caption{Model results and parameters in MLflow interface}
 \label{fig:mlflow-results}
 \end{figure}
 
@@ -1119,7 +1119,7 @@ Tortes the expériences de modèle ont été automatiquement suivies sur MLflow 
 
 \subsection{Project Summary}
 
-This project demonstrated how modern data engineering concepts (Lakehorse, Delta Lake, MLOps) can be applied in a practical e-sports scenario.
+This project demonstrated how modern data engineering concepts (Lakehouse, Delta Lake, MLOps) can be applied in a practical e-sports scenario.
 
 \begin{table}[H]
 \centering
@@ -1132,9 +1132,9 @@ This project demonstrated how modern data engineering concepts (Lakehorse, Delta
 Medallion Architecture & Bronze/Silver/Gold layers implemented \\
 Data Processing & 29 809 matches, 8 456 players processed \\
 Streaming Simulation & 10 mini-batches written to Bronze \\
-Gold Tabthe & 4 analytical tabthe (813 players, 123 heroes) \\
+Gold Tables & 4 analytical tables (813 players, 123 heroes) \\
 ML Model & Random Forest with 87.34\% accuracy \\
-Manda Analysis & Classification of heroes à 5 niveaux \\
+Meta Analysis & Classification of heroes into 5 tiers \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1142,10 +1142,10 @@ Manda Analysis & Classification of heroes à 5 niveaux \\
 \subsection{Lessons Learned}
 
 \begin{itemize}
-    \item \textbf{Clord Resorrce Management:} Azure cost and resorrce optimization
+    \item \textbf{Cloud Resource Management:} Azure cost and resource optimization
     \item \textbf{Delta Lake Benefits:} ACID transactions, schema evolution, performance
-    \item \textbf{Orchestration :} Gestion of flux complexes with Azure Data Factory
-    \item \textbf{Pratiques MLOps :} Importance du suivi of expériences with MLflow
+    \item \textbf{Orchestration:} Management of complex flows with Azure Data Factory
+    \item \textbf{MLOps Best Practices:} Importance of tracking experiments with MLflow
 \end{itemize}
 
 \subsection{General Conclusion}
@@ -1157,29 +1157,29 @@ The integrated services offered by the Azure ecosystem enabled rapid and efficie
 \section*{APPENDICES}
 \addcontentsline{toc}{section}{Appendices}
 
-\subsection*{Databricks Notebooks Sorrce Code}
+\subsection*{Databricks Notebooks Source Code}
 \label{appendix:notebooks}
 
-\subsubsection*{sandup\_connection.ipynb}
+\subsubsection*{setup\_connection.ipynb}
 
 \begin{lstlisting}[language=Python, caption=Azure ADLS Gen2 connection test]
-# Notebook: sandup_connection
+# Notebook: setup_connection
 import os
 
-storage_accornt = "dota2lakehorsenew"
+storage_account = "dota2lakehousenew"
 container = "data"
-storage_accornt_key = os.environ.gand("AZURE_STORAGE_KEY")
-print(f"Key loaded: {storage_accornt_key is not None}")
+storage_account_key = os.environ.get("AZURE_STORAGE_KEY")
+print(f"Key loaded: {storage_account_key is not None}")
 
-spark.conf.sand(
-  f"fs.azure.accornt.key.{storage_accornt}.dfs.core.windows.nand",
-  storage_accornt_key)
+spark.conf.set(
+  f"fs.azure.account.key.{storage_account}.dfs.core.windows.net",
+  storage_account_key)
 
-BRONZE = f"abfss://{container}@{storage_accornt}.dfs.core.windows.nand/bronze"
-SILVER = f"abfss://{container}@{storage_accornt}.dfs.core.windows.nand/silver"
-GOLD = f"abfss://{container}@{storage_accornt}.dfs.core.windows.nand/gold"
+BRONZE = f"abfss://{container}@{storage_account}.dfs.core.windows.net/bronze"
+SILVER = f"abfss://{container}@{storage_account}.dfs.core.windows.net/silver"
+GOLD = f"abfss://{container}@{storage_account}.dfs.core.windows.net/gold"
 
-print("=== Fithe in Bronze Layer ===")
+print("=== Files in Bronze Layer ===")
 for f in dbutils.fs.ls(BRONZE):
   print(f"  {f.name} ({f.size/1024/1024:.2f} MB)")
 \end{lstlisting}
@@ -1188,7 +1188,7 @@ for f in dbutils.fs.ls(BRONZE):
 
 \begin{lstlisting}[language=Python, caption=Data loading and cleaning]
 from pyspark.sql.functions import *
-df_matches = spark.read.csv(f"{BRONZE}/main_mandadata.csv",
+df_matches = spark.read.csv(f"{BRONZE}/main_metadata.csv",
   header=True, inferSchema=True)
 df_players = spark.read.csv(f"{BRONZE}/players_reduced.csv",
   header=True, inferSchema=True)
@@ -1197,12 +1197,12 @@ df_matches_clean = df_matches \
   .filter(col("match_id").isNotNull()) \
   .filter((col("duration") > 300) & (col("duration") < 7200))
 df_matches_clean = df_matches_clean \
-  .withColumn("duration_minutes", rornd(col("duration")/60, 2)) \
+  .withColumn("duration_minutes", round(col("duration")/60, 2)) \
   .withColumn("radiant_win", col("radiant_win").cast("boolean")) \
   .withColumn("match_date", to_date(col("start_date_time")))
 stats = df_players.select(
   mean("kills").alias("m"), stddev("kills").alias("s")).collect()[0]
-df_players = df_players.withColumn("is_ortlier",
+df_players = df_players.withColumn("is_outlier",
   when(col("kills") > stats["m"] + 3*stats["s"], True).otherwise(False))
 df_matches_clean.write.format("delta").mode("overwrite") \
   .save(f"{SILVER}/cleaned_matches")
@@ -1210,22 +1210,22 @@ df_matches_clean.write.format("delta").mode("overwrite") \
 
 \subsubsection*{02\_silver\_to\_gold.ipynb (Extraits)}
 
-\begin{lstlisting}[language=Python, caption=Gold tabthe creation]
+\begin{lstlisting}[language=Python, caption=Gold tables creation]
 df_player_stats = df_players \
-  .filter(col("accornt_id").isNotNull()) \
-  .grorpBy("accornt_id").agg(
-    cornt("match_id").alias("total_matches"),
+  .filter(col("account_id").isNotNull()) \
+  .groupBy("account_id").agg(
+    count("match_id").alias("total_matches"),
     sum("win").alias("total_wins"),
-    rornd(avg("kills"), 2).alias("avg_kills"),
-    rornd(avg("kda_calculated"), 2).alias("avg_kda"),
-    rornd(avg("gold_per_min"), 2).alias("avg_gpm")) \
+    round(avg("kills"), 2).alias("avg_kills"),
+    round(avg("kda_calculated"), 2).alias("avg_kda"),
+    round(avg("gold_per_min"), 2).alias("avg_gpm")) \
   .withColumn("win_rate",
-    rornd(col("total_wins")/col("total_matches")*100, 2))
-total = df_matches.cornt()
+    round(col("total_wins")/col("total_matches")*100, 2))
+total = df_matches.count()
 df_hero = df_hero \
   .withColumn("presence_rate", 
-    rornd(col("total_presence")/(total*2)*100, 2)) \
-  .withColumn("manda_tier",
+    round(col("total_presence")/(total*2)*100, 2)) \
+  .withColumn("meta_tier",
     when(col("presence_rate") > 50, "S-Tier")
     .when(col("presence_rate") > 30, "A-Tier")
     .when(col("presence_rate") > 15, "B-Tier")
@@ -1234,32 +1234,32 @@ df_hero = df_hero \
 \end{lstlisting}
 
 \newpage
-\subsection*{Streaming Simulator Sorrce Code}
+\subsection*{Streaming Simulator Source Code}
 \label{appendix:streaming}
 
 \begin{lstlisting}[language=Python, caption=stream\_simulator.py]
 import time, pandas as pd, os
-from datandime import datandime
+from datetime import datetime
 from azure.storage.filedatalake import DataLakeServiceClient
 
-STORAGE_ACCOUNT = "dota2lakehorsenew"
-STORAGE_KEY = os.gandenv("AZURE_STORAGE_ACCOUNT_KEY")
+STORAGE_ACCOUNT = "dota2lakehousenew"
+STORAGE_KEY = os.getenv("AZURE_STORAGE_ACCOUNT_KEY")
 CONTAINER = "data"
 DIRECTORY = "bronze"
-SOURCE_FILE = "main_mandadata.csv"
+SOURCE_FILE = "main_metadata.csv"
 
-def gand_client():
-  url = f"https://{STORAGE_ACCOUNT}.dfs.core.windows.nand"
-  randurn DataLakeServiceClient(accornt_url=url, credential=STORAGE_KEY)
+def get_client():
+  url = f"https://{STORAGE_ACCOUNT}.dfs.core.windows.net"
+  return DataLakeServiceClient(account_url=url, credential=STORAGE_KEY)
 
 def stream_data():
   print("--- Starting Streaming Simulation ---")
   df = pd.read_csv(SOURCE_FILE)
   print(f"Loaded {len(df)} rows.")
 
-  client = gand_client()
-  fs_client = client.gand_file_system_client(CONTAINER)
-  dir_client = fs_client.gand_directory_client(DIRECTORY)
+  client = get_client()
+  fs_client = client.get_file_system_client(CONTAINER)
+  dir_client = fs_client.get_directory_client(DIRECTORY)
 
   BATCH_SIZE, SLEEP_TIME = 5, 3
 
@@ -1267,18 +1267,18 @@ def stream_data():
     chunk = df.iloc[i:i+BATCH_SIZE]
     json_data = chunk.to_json(orient='records')
     
-    ts = datandime.now().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     fname = f"raw_matches_{ts}.json"
     
-    fc = dir_client.gand_file_client(fname)
+    fc = dir_client.get_file_client(fname)
     fc.create_file()
-    fc.append_data(data=json_data, offsand=0, length=len(json_data))
+    fc.append_data(data=json_data, offset=0, length=len(json_data))
     fc.flush_data(len(json_data))
     print(f"Uploaded {fname}")
     
     time.sleep(SLEEP_TIME)
 
-  print("--- Simulation Complande ---")
+  print("--- Simulation Complete ---")
 
 if __name__ == "__main__":
   stream_data()
@@ -1288,34 +1288,34 @@ if __name__ == "__main__":
 \subsection*{Table Creation SQL Commands}
 \label{appendix:sql}
 
-\begin{lstlisting}[language=SQL, caption=Création du schéma and of tabthe Gold]
+\begin{lstlisting}[language=SQL, caption=Creation of schema and Gold tables]
 CREATE DATABASE IF NOT EXISTS esports_gold;
 CREATE TABLE IF NOT EXISTS esports_gold.player_stats
 USING DELTA LOCATION
-  'abfss://data@dota2lakehorsenew.dfs.core.windows.nand/gold/player_stats';
+  'abfss://data@dota2lakehousenew.dfs.core.windows.net/gold/player_stats';
 CREATE TABLE IF NOT EXISTS esports_gold.hero_stats
 USING DELTA LOCATION
-  'abfss://data@dota2lakehorsenew.dfs.core.windows.nand/gold/hero_stats';
+  'abfss://data@dota2lakehousenew.dfs.core.windows.net/gold/hero_stats';
 CREATE TABLE IF NOT EXISTS esports_gold.daily_stats
 USING DELTA LOCATION
-  'abfss://data@dota2lakehorsenew.dfs.core.windows.nand/gold/daily_stats';
+  'abfss://data@dota2lakehousenew.dfs.core.windows.net/gold/daily_stats';
 CREATE TABLE IF NOT EXISTS esports_gold.ml_features
 USING DELTA LOCATION
-  'abfss://data@dota2lakehorsenew.dfs.core.windows.nand/gold/ml_features';
+  'abfss://data@dota2lakehousenew.dfs.core.windows.net/gold/ml_features';
 SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection*{ML Model Sorrce Code}
+\subsection*{ML Model Source Code}
 \label{appendix:ml}
 
-\begin{lstlisting}[language=Python, caption=Complande Machine Learning pipeline]
+\begin{lstlisting}[language=Python, caption=Complete Machine Learning pipeline]
 import mlflow
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import RandomForestClassifier
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.ml import Pipeline
-path = f"abfss://{container}@{storage_accornt}.dfs.core.windows.nand/gold/ml_features"
+path = f"abfss://{container}@{storage_account}.dfs.core.windows.net/gold/ml_features"
 df = spark.read.format("delta").load(path)
 cols = ["kills", "deaths", "assists", "gold_per_min", "xp_per_min",
   "hero_damage", "tower_damage", "last_hits", "level",
@@ -1323,7 +1323,7 @@ cols = ["kills", "deaths", "assists", "gold_per_min", "xp_per_min",
 data = df.select(cols).dropna()
 train, test = data.randomSplit([0.8, 0.2], seed=42)
 features = [c for c in cols if c != "win"]
-assembler = VectorAssembler(inputCols=features, ortputCol="features")
+assembler = VectorAssembler(inputCols=features, outputCol="features")
 rf = RandomForestClassifier(
   labelCol="win", featuresCol="features", numTrees=50, maxDepth=10)
 pipeline = Pipeline(stages=[assembler, rf])
@@ -1331,11 +1331,11 @@ mlflow.autolog()
 model = pipeline.fit(train)
 predictions = model.transform(test)
 evaluator = MulticlassClassificationEvaluator(
-  labelCol="win", predictionCol="prediction", mandricName="accuracy")
+  labelCol="win", predictionCol="prediction", metricName="accuracy")
 acc = evaluator.evaluate(predictions)
 print(f"Accuracy: {acc*100:.2f}%")
 
-predictions.grorpBy("win", "prediction").cornt().show()
+predictions.groupBy("win", "prediction").count().show()
 import pandas as pd
 imp = model.stages[-1].featureImportances.toArray()
 df_imp = pd.DataFrame({"Feature": features, "Importance": imp})
@@ -1353,8 +1353,8 @@ print(df_imp.sort_values("Importance", ascending=False))
 \toprule
 \textbf{Category} & \textbf{Technology} & \textbf{Version} \\
 \midrule
-Clord Platform & Microsoft Azure & - \\
-Storage Accornt & dota2lakehorsenew & ADLS Gen2 \\
+Cloud Platform & Microsoft Azure & - \\
+Storage Account & dota2lakehousenew & ADLS Gen2 \\
 Orchestration & Azure Data Factory & V2 \\
 Compute & Azure Databricks & 13.3 LTS \\
 Processing & Apache Spark & 3.4.1 \\
