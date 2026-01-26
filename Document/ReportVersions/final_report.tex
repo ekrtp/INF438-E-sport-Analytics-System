@@ -824,9 +824,9 @@ All model experiments were automatically tracked on MLflow with \texttt{mlflow.a
 \newpage
 \subsection{Databricks Cluster Access Issues}
 
-\textbf{Problem:} Due to limitations of the \textit{Azure for Students} subscription, I could not create or select a Databricks cluster, which prevented notebook execution and thus launching SQL analyses on Gold data.
+\textbf{Problem:} Due to limitations of the \textit{Azure for Students} subscription, access to creating or selecting a Databricks cluster was restricted, which prevented notebook execution and thus launching SQL analyses on Gold data.
 
-\textbf{Solution:} To ensure project progress, a group member with the necessary permissions temporarily delegated access to their Databricks cluster (\textit{esports-cluster}). This allowed me to execute SQL queries on Gold tables and continue the analytical phase. Access information was not exposed in plain text: the key and connection parameters were managed securely via Databricks environment variables and \textit{Databricks Secrets}.
+\textbf{Solution:} To ensure project progress, temporary access to a group member's Databricks cluster (\textit{esports-cluster}) was provided. This enabled SQL queries on Gold tables and continuation of the analytical phase. Access information was not exposed in plain text: the key and connection parameters were managed securely via Databricks environment variables and \textit{Databricks Secrets}.
 
 % Section 6: Conclusion
 \section{Conclusion}
