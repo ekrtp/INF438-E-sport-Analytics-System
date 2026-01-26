@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[french]{babel}
+\usepackage[turkish,shorthands=off]{babel}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{fancyhdr}
@@ -20,7 +20,7 @@
 \usepackage{enumitem}
 \usepackage{tocloft}
 \usepackage{tabularx}
-\usepackage[export]{adjustbox}
+\usepackage{adjustbox}
 
 
 \geometry{
@@ -161,25 +161,25 @@ Bu proje kapsamında, Dota 2 profesyonel maç verileri üzerinde işleme, analiz
 
 \subsection{Kullanılan Veri Seti}
 
-Le jeu de données utilisé dans ce projet est le \textbf{``Dota 2 Pro League Matches 2023''} publié sur la plateforme Kaggle. Ce jeu de données contient des enregistrements détaillés des matchs des tournois professionnels de Dota 2 tout au long de l'année 2023.
+Bu projede kullanılan veri seti, Kaggle platformunda yayınlanan \textbf{``Dota 2 Pro League Matches 2023''} tür. Bu veri seti, 2023 yılı boyunca gerçekleşen profesyonel Dota 2 turnuva maçlarının detaylı kayıtlarını içerir.
 
 \begin{table}[H]
 \centering
-\caption{Caractéristiques du jeu de données}
+\caption{Veri Seti Özellikleri}
 \label{tab:dataset}
 \begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{5cm}}
 \toprule
-\textbf{Nom du Fichier} & \textbf{Taille} & \textbf{Description} \\
+\textbf{Dosya Adı} & \textbf{Boyut} & \textbf{Açıklama} \\
 \midrule
-main\_metadata.csv & 9.09 MB & Métadonnées des matchs \\
-players\_reduced.csv & 152.00 MB & Statistiques des joueurs \\
-picks\_bans.csv & 33.01 MB & Données de sélection/bannissement \\
-teams.csv & 8.09 MB & Informations sur les équipes \\
+main\_metadata.csv & 9.09 MB & Maç üst verileri (Metadata) \\
+players\_reduced.csv & 152.00 MB & Oyuncu istatistikleri \\
+picks\_bans.csv & 33.01 MB & Seçim/Yasaklama verileri \\
+teams.csv & 8.09 MB & Takım bilgileri \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Le format CSV et la structure relationnelle du jeu de données ont nécessité un processus complet de nettoyage et de fusion lors de la transition de la couche Bronze vers la couche Silver.
+CSV formatı ve veri setinin ilişkisel yapısı, Bronze katmanından Silver katmanına geçiş sırasında kapsamlı bir temizleme ve birleştirme süreci gerektirmiştir.
 
 \subsection{Proje Hedefleri}
 
@@ -198,23 +198,23 @@ Bu projenin ana hedefleri şu şekilde tanımlanmıştır:
 
 \begin{table}[H]
 \centering
-\caption{Services Microsoft Azure utilisés}
+\caption{Kullanılan Microsoft Azure Servisleri}
 \label{tab:azure-services}
 \begin{tabular}{>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{7cm}}
 \toprule
-\textbf{Service} & \textbf{Objectif d'Utilisation} \\
+\textbf{Service} & \textbf{Kullanım Amacı} \\
 \midrule
-Azure Data Lake Storage Gen2 & Stockage central pour les couches Lakehouse \\
-Azure Data Factory & Orchestration des pipelines et planification \\
-Azure Databricks & Traitement des données et développement ML \\
-Delta Lake & Format de données performant conforme ACID \\
-MLflow & Suivi des expériences de machine learning \\
-Power BI & Visualisation et création de tableaux de bord \\
+Azure Data Lake Storage Gen2 & Lakehouse katmanları için merkezi depolama \\
+Azure Data Factory & Pipeline orkestrasyonu ve planlama \\
+Azure Databricks & Veri işleme ve ML geliştirme \\
+Delta Lake & ACID uyumlu performanslı veri formatı \\
+MLflow & Makine öğrenmesi deneylerinin takibi \\
+Power BI & Görselleştirme ve dashboard oluşturma \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Toutes les ressources ont été créées à l'aide de l'abonnement \textbf{Microsoft Azure for Students} et gérées en tenant compte de l'optimisation des coûts.
+Tüm kaynaklar, Microsoft Azure for Students aboneliği kullanılarak oluşturulmuş ve maliyet optimizasyonu dikkate alınarak yönetilmiştir.
 
 % Section 2: Conception Architecturale
 \section{Mimari Tasarım}
@@ -443,7 +443,7 @@ Temizlenmiş veriler iş mantığı ve gelişmiş hesaplamalar almıştır.
 
 \textbf{Oyuncu İstatistikleri (player\_stats):} Ortalamalar (KDA, GPM, XPM) ve kazanma oranı hesaplaması ile oyuncu hesabına göre toplama. Sonuç: \textbf{813 benzersiz oyuncu} için hesaplanan istatistikler.
 
-\textbf{Kahraman Meta Analizi (hero\_stats):} Kahramanları varlık oranlarına göre 5 katmana sınıflandıran bir algoritma (Tablo~\ref{tab:tier-criteria}'a bakınız).
+\textbf{Kahraman Meta Analizi (hero\_stats):} Kahramanları varlık oranlarına göre 5 katmana sınıflandıran bir algoritma (Tablo~\ref{tab:tier-criteria}'ye bakınız).
 
 \begin{table}[H]
 \centering
@@ -508,7 +508,7 @@ Gold katmanı tabloları Databricks Unity Catalog'da \textbf{esports\_gold} şem
 
 \textit{Gold} katmanının analitik tabloları Azure Data Lake Storage Gen2 üzerinde Delta Lake formatında saklanmaktadır.
 Bizim durumumuzda, \textit{Azure for Students} aboneliğinin belirli sınırlamaları (kotalar / RBAC izinleri) grup üyelerinin tümü için doğrudan ve istikrarlı erişimi engellemiştir.
-Projenin sürekliliğini sağlamak için, \textit{Storage Account}'a erişim, gerekli izinlere sahip bir grup üyesi tarafından sağlanan bir erişim anahtarı aracılığıyla yapılmıştır.
+Projenin sürekliliğini sağlamak için, \textit{Storage Account}a erişim, gerekli izinlere sahip bir grup üyesi tarafından sağlanan bir erişim anahtarı aracılığıyla yapılmıştır.
 Bu anahtar raporda veya sürüm kontrol edilmiş kodda asla açık metin olarak gösterilmez; Databricks ortam değişkenleri aracılığıyla enjekte edilir.
 
 \paragraph{CPU kısıtlamaları ve paylaşılan küme kullanımı.}
@@ -598,13 +598,12 @@ Analiz, çok kısa maçlarda ($<$25 dk) Radiant takımının hafif bir avantaja 
 \subsection{Power BI Görselleştirmesi}
 \subsubsection{Power BI'da Bağlantı ve Veri Yükleme}
 
-Nous avons réalisé la partie visualisation avec Power BI Desktop à partir des données Gold. 
-Pour récupérer les données, nous avons utilisé \textit{Get Data} puis la source \textit{Azure Blob Storage}. 
-Comme tout le monde ne pouvait pas se connecter facilement (droits/quotas Azure for Students), nous avons utilisé une clé d’accès partagée par un membre du groupe.
+Görselleştirme kısmı, Gold verileri kullanılarak Power BI Desktop ile gerçekleştirilmiştir.
+Verileri almak için "Get Data" ve ardından Azure Blob Storage kaynağı kullanılmıştır.
+Herkes kolayca bağlantı kuramadığı için (Azure for Students izin/kota sınırlamaları), bir grup üyesi tarafından paylaşılan erişim anahtarı kullanılmıştır.
 
-Après la connexion, nous avons trouvé les fichiers Parquet dans le conteneur \textit{data} (couche Gold) et importé les tables \textit{daily\_stats}, \textit{player\_stats}, \textit{hero\_stats} et \textit{ml\_features}. 
-Ensuite, nous avons ajouté une table \textit{Date} pour filtrer par temps, puis nous l’avons reliée à \textit{daily\_stats} avec la colonne \textit{match\_date}. 
-Enfin, nous avons créé les pages et les graphiques pour analyser les tendances générales, les meilleurs joueurs et la méta des héros.
+Bağlantı sağlandıktan sonra, data konteynerindeki (Gold katmanı) Parquet dosyaları bulunmuş ve daily\_stats, player\_stats, hero\_stats ve ml\_features tabloları içe aktarılmıştır.
+Ardından, zamana göre filtreleme yapmak için bir Date tablosu eklenmiş ve match\_date sütunu ile daily\_stats tablosuna bağlanmıştır. Son olarak, genel eğilimleri, en iyi oyuncuları ve kahraman metasını analiz etmek için sayfalar ve grafikler oluşturulmuştur.
 
 
 \subsubsection{Sayfa 1: Genel Bakış ve Günlük Eğilimler}
@@ -694,22 +693,22 @@ Maç sonucunu tahmin etmek için bir ikili sınıflandırma modeli geliştirilmi
 
 \begin{table}[H]
 \centering
-\caption{Caractéristiques (Features) utilisées}
+\caption{Kullanılan Özellikler (Features)}
 \label{tab:features}
 \begin{tabular}{>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Feature} & \textbf{Description} & \textbf{Catégorie} \\
+\textbf{Feature} & \textbf{Açıklama} & \textbf{Kategori} \\
 \midrule
-kills & Nombre d'éliminations & Combat \\
-deaths & Nombre de morts & Combat \\
-assists & Nombre d'assistances & Combat \\
-gold\_per\_min & Or par minute & Économie \\
-xp\_per\_min & Expérience par minute & Économie \\
-hero\_damage & Dégâts aux héros & Dégâts \\
-tower\_damage & Dégâts aux tours & Dégâts \\
-last\_hits & Nombre de last hits & Progression \\
-level & Niveau du joueur & Progression \\
-duration\_minutes & Durée du match & Info Match \\
+kills & Öldürme Sayısı & Savaş \\
+deaths & Ölüm Sayısı & Savaş \\
+assists & Asist Sayısı & Savaş \\
+gold\_per\_min & Dakika başına altın & Ekonomi \\
+xp\_per\_min & Dakika başına tecrübe (XP) & Ekonomi \\
+hero\_damage & Kahraman hasarı & Hasar \\
+tower\_damage & Kule hasarı & Hasar \\
+last\_hits & Son vuruş sayısı & İlerleme \\
+level & Oyuncu seviyesi & İlerleme \\
+duration\_minutes & Maç süresi & Maç Bilgisi \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -737,34 +736,34 @@ Doğruluk (Accuracy): \textbf{\LARGE 87.34\%}\\[0.3cm]
 
 \begin{table}[H]
 \centering
-\caption{Matrice de Confusion}
+\caption{Karışıklık Matrisi (Confusion Matrix)}
 \label{tab:confusion-matrix}
 \begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}}
 \toprule
-\textbf{Réel / Prédit} & \textbf{Lose (0)} & \textbf{Win (1)} \\
+\textbf{Gerçek / Tahmin} & \textbf{Kaybetme (0)} & \textbf{Kazanma (1)} \\
 \midrule
-\textbf{Lose (0)} & 727 (VN) & 131 (FP) \\
-\textbf{Win (1)} & 81 (FN) & 735 (VP) \\
+\textbf{Kaybetme (0)} & 727 (GN) & 131 (YP) \\
+\textbf{Kazanma (1)} & 81 (YN) & 735 (GP) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Métriques calculées :}
+\textbf{Hesaplanan Metrikler :}
 \begin{itemize}
-    \item Taux de Vrais Positifs (Recall) : $\frac{735}{735+81} = 90.07\%$
-    \item Taux de Vrais Négatifs : $\frac{727}{727+131} = 84.73\%$
-    \item Précision : $\frac{735}{735+131} = 84.87\%$
+    \item Gerçek Pozitif Oranı (Recall) : $\frac{735}{735+81} = 90.07\%$
+    \item Gerçek Negatif Oranı : $\frac{727}{727+131} = 84.73\%$
+    \item Kesinlik (Precision) : $\frac{735}{735+131} = 84.87\%$
 \end{itemize}
 
 \subsection{Özellik Önem Analizi}
 
 \begin{table}[H]
 \centering
-\caption{Classement de l'importance des features}
+\caption{Özellik Önem Sıralaması}
 \label{tab:feature-importance}
 \begin{tabular}{>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}}
 \toprule
-\textbf{Rang} & \textbf{Feature} & \textbf{Importance} \\
+\textbf{Sıra} & \textbf{Feature} & \textbf{Önem} \\
 \midrule
 1 & assists & 0.311480 \\
 2 & deaths & 0.204537 \\
@@ -831,9 +830,9 @@ Tüm model denemeleri \texttt{mlflow.autolog()} ile MLflow üzerinde otomatik ol
 \newpage
 \subsection{Databricks Cluster Erişim Sorunları}
 
-\textbf{Sorun:} \textit{Azure for Students} aboneliğinin sınırlamaları nedeniyle, bir Databricks kümesi oluşturamıyor veya seçemiyordum, bu da notebook yürütmesini ve dolayısıyla Gold verileri üzerinde SQL analizlerinin başlatılmasını engelliyordu.
+\textbf{Sorun:} \textit{Azure for Students} aboneliğinin sınırlamaları nedeniyle, bir Databricks kümesi oluşturamıyor veya seçemiyorduk, bu da notebook yürütmesini ve dolayısıyla Gold verileri üzerinde SQL analizlerinin başlatılmasını engelliyordu.
 
-\textbf{Çözüm:} Projenin ilerlemesini sağlamak için, gerekli izinlere sahip bir grup üyesi geçici olarak Databricks kümesine (\textit{esports-cluster}) erişim yetkisi verdi. Bu, Gold tablolarında SQL sorguları yürütmeme ve analitik aşamaya devam etmeme olanak sağladı. Erişim bilgileri açık metin olarak gösterilmedi: anahtar ve bağlantı parametreleri Databricks ortam değişkenleri ve \textit{Databricks Secrets} aracılığıyla güvenli bir şekilde yönetildi.
+\textbf{Çözüm:} Projenin ilerlemesini sağlamak için, gerekli izinlere sahip bir grup üyesi geçici olarak Databricks kümesine (\textit{esports-cluster}) erişim yetkisi verdi. Bu, Gold tablolarında SQL sorguları yürütmemize ve analitik aşamaya devam etmemize olanak sağladı. Erişim bilgileri açık metin olarak gösterilmedi: anahtar ve bağlantı parametreleri Databricks ortam değişkenleri ve \textit{Databricks Secrets} aracılığıyla güvenli bir şekilde yönetildi.
 
 % Section 6: Conclusion
 \section{Sonuç}
@@ -844,18 +843,18 @@ Bu proje, modern veri mühendisliği kavramlarının (Lakehouse, Delta Lake, MLO
 
 \begin{table}[H]
 \centering
-\caption{Principaux résultats obtenus}
+\caption{Elde Edilen Temel Sonuçlar}
 \label{tab:results-summary}
 \begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{8cm}}
 \toprule
-\textbf{Composant} & \textbf{Résultat} \\
+\textbf{Bileşen} & \textbf{Sonuç} \\
 \midrule
-Medallion Architecture & Couches Bronze/Silver/Gold mises en place \\
-Traitement des Données & 29 809 matchs, 8 456 joueurs traités \\
-Simulation Streaming & 10 mini-batches écrits dans Bronze \\
-Tables Gold & 4 tables analytiques (813 joueurs, 123 héros) \\
-Modèle ML & Random Forest avec 87.34\% d'accuracy \\
-Analyse Méta & Classification des héros à 5 niveaux \\
+Medallion Mimarisi & Bronze/Silver/Gold katmanları kuruldu \\
+Veri İşleme & 29.809 maç, 8.456 oyuncu işlendi \\
+Streaming Simülasyonu & Bronze katmanına 10 mini-batch yazıldı \\
+Gold Tabloları & 4 analitik tablo (813 oyuncu, 123 kahraman) \\
+ML Modeli & \%87.34 doğruluk oranlı Random Forest \\
+Meta Analizi & 5 seviyeli kahraman sınıflandırması \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -883,7 +882,7 @@ Azure ekosistemi tarafından sunulan entegre hizmetler, uçtan uca veri çözüm
 
 \subsubsection*{setup\_connection.ipynb}
 
-\begin{lstlisting}[language=Python, caption=Test de connexion Azure ADLS Gen2]
+\begin{lstlisting}[language=Python, caption=Azure ADLS Gen2 Bağlantı Testi]
 # Notebook: setup_connection
 import os
 
@@ -907,7 +906,7 @@ for f in dbutils.fs.ls(BRONZE):
 
 \subsubsection*{01\_bronze\_to\_silver.ipynb (Extraits)}
 
-\begin{lstlisting}[language=Python, caption=Chargement et nettoyage des données]
+\begin{lstlisting}[language=Python, caption=Veri Yükleme ve Temizleme]
 from pyspark.sql.functions import *
 df_matches = spark.read.csv(f"{BRONZE}/main_metadata.csv",
   header=True, inferSchema=True)
@@ -931,7 +930,7 @@ df_matches_clean.write.format("delta").mode("overwrite") \
 
 \subsubsection*{02\_silver\_to\_gold.ipynb (Extraits)}
 
-\begin{lstlisting}[language=Python, caption=Création des tables Gold]
+\begin{lstlisting}[language=Python, caption=Gold Tablolarının Oluşturulması]
 df_player_stats = df_players \
   .filter(col("account_id").isNotNull()) \
   .groupBy("account_id").agg(
@@ -958,7 +957,7 @@ df_hero = df_hero \
 \subsection*{Streaming Simülatörü Kaynak Kodu}
 \label{appendix:streaming}
 
-\begin{lstlisting}[language=Python, caption=stream\_simulator.py]
+\begin{lstlisting}[language=Python, caption=stream\_simulator.py - Streaming Simülatörü]
 import time, pandas as pd, os
 from datetime import datetime
 from azure.storage.filedatalake import DataLakeServiceClient
@@ -1009,7 +1008,7 @@ if __name__ == "__main__":
 \subsection*{Tablo Oluşturma SQL Komutları}
 \label{appendix:sql}
 
-\begin{lstlisting}[language=SQL, caption=Création du schéma et des tables Gold]
+\begin{lstlisting}[language=SQL, caption=Şema ve Gold Tablolarının Oluşturulması]
 CREATE DATABASE IF NOT EXISTS esports_gold;
 CREATE TABLE IF NOT EXISTS esports_gold.player_stats
 USING DELTA LOCATION
@@ -1030,7 +1029,7 @@ SHOW TABLES IN esports_gold;
 \subsection*{ML Model Kaynak Kodu}
 \label{appendix:ml}
 
-\begin{lstlisting}[language=Python, caption=Pipeline Machine Learning complet]
+\begin{lstlisting}[language=Python, caption=Tam Makine Öğrenmesi Pipeline'ı]
 import mlflow
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import RandomForestClassifier
@@ -1069,20 +1068,20 @@ print(df_imp.sort_values("Importance", ascending=False))
 
 \begin{table}[H]
 \centering
-\caption{Stack technologique du projet}
+\caption{Proje Teknoloji Yığını}
 \begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Catégorie} & \textbf{Technologie} & \textbf{Version} \\
+\textbf{Kategori} & \textbf{Teknoloji} & \textbf{Sürüm} \\
 \midrule
-Plateforme Cloud & Microsoft Azure & - \\
+Bulut Platformu & Microsoft Azure & - \\
 Storage Account & dota2lakehousenew & ADLS Gen2 \\
-Orchestration & Azure Data Factory & V2 \\
-Compute & Azure Databricks & 13.3 LTS \\
-Processing & Apache Spark & 3.4.1 \\
-Langage & Python / PySpark & 3.10 \\
-Format de Données & Delta Lake & 2.4.0 \\
-ML Tracking & MLflow & Auto-enabled \\
-Visualisation & Power BI & - \\
+Orkestrasyon & Azure Data Factory & V2 \\
+İşlem & Azure Databricks & 13.3 LTS \\
+İşleme & Apache Spark & 3.4.1 \\
+Dil & Python / PySpark & 3.10 \\
+Veri Formatı & Delta Lake & 2.4.0 \\
+ML Takibi & MLflow & Otomatik \\
+Görselleştirme & Power BI & - \\
 \bottomrule
 \end{tabular}
 \end{table}
