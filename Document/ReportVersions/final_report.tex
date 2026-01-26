@@ -281,13 +281,13 @@ esports\_gold.ml\_features & ML features & 8 312 \\
 All Lakehouse layers are positioned on Azure Data Lake Storage Gen2:
 
 \begin{itemize}
-    \item \textbf{Storage Account :} \texttt{dota2lakehousenew}
-    \item \textbf{Container :} \texttt{data}
+    \item \textbf{Storage Account:} \texttt{dota2lakehousenew}
+    \item \textbf{Container:} \texttt{data}
     \item \textbf{Paths:}
     \begin{itemize}
-        \item Bronze : \texttt{abfss://data@dota2lakehousenew.../bronze/}
-        \item Silver : \texttt{abfss://data@dota2lakehousenew.../silver/}
-        \item Gold : \texttt{abfss://data@dota2lakehousenew.../gold/}
+        \item Bronze: \texttt{abfss://data@dota2lakehousenew.../bronze/}
+        \item Silver: \texttt{abfss://data@dota2lakehousenew.../silver/}
+        \item Gold: \texttt{abfss://data@dota2lakehousenew.../gold/}
     \end{itemize}
 \end{itemize}
 
@@ -389,10 +389,10 @@ Databricks Runtime & 13.3 LTS (Spark 3.4.1) \\
 
 \textbf{Notebooks created:}
 \begin{enumerate}
-    \item \textbf{setup\_connection.ipynb} : Azure ADLS Gen2 connection test
-    \item \textbf{01\_bronze\_to\_silver.ipynb} : Raw data cleaning
-    \item \textbf{02\_silver\_to\_gold.ipynb} : Business logic application
-    \item \textbf{04\_ml\_model.ipynb} : ML model training
+    \item \textbf{setup\_connection.ipynb}: Azure ADLS Gen2 connection test
+    \item \textbf{01\_bronze\_to\_silver.ipynb}: Raw data cleaning
+    \item \textbf{02\_silver\_to\_gold.ipynb}: Business logic application
+    \item \textbf{04\_ml\_model.ipynb}: ML model training
 \end{enumerate}
 
 The complete source code of these notebooks is available in \textbf{Appendix~\ref{appendix:notebooks}}.
@@ -1007,7 +1007,7 @@ The complete ML pipeline source code is available in \textbf{Appendix~\ref{appen
 \textbf{\large MODEL RESULTS}\\[0.5cm]
 \rule{0.9\textwidth}{0.5pt}\\[0.3cm]
 Model used: \textbf{Random Forest Classifier}\\[0.3cm]
-Precision (Accuracy): \textbf{\LARGE 87.34\%}\\[0.3cm]
+Accuracy: \textbf{\LARGE 87.34\%}\\[0.3cm]
 \rule{0.9\textwidth}{0.5pt}
 \vspace{0.5cm}
 \end{minipage}
