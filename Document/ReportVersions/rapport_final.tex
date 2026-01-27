@@ -869,13 +869,13 @@ Les services intégrés offerts par l'écosystème Azure ont permis le développ
 
 \newpage
 \appendix
-\section*{ANNEXES}
+\section{ANNEXES}
 \addcontentsline{toc}{section}{Annexes}
 
-\subsection*{Code Source des Notebooks Databricks}
+\subsection{Code Source des Notebooks Databricks}
 \label{appendix:notebooks}
 
-\subsubsection*{setup\_connection.ipynb}
+\subsubsection{setup\_connection.ipynb}
 
 \begin{lstlisting}[language=Python, caption=Test de connexion Azure ADLS Gen2]
 # Notebook: setup_connection
@@ -899,7 +899,7 @@ for f in dbutils.fs.ls(BRONZE):
   print(f"  {f.name} ({f.size/1024/1024:.2f} MB)")
 \end{lstlisting}
 
-\subsubsection*{01\_bronze\_to\_silver.ipynb (Extraits)}
+\subsubsection{01\_bronze\_to\_silver.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Chargement et nettoyage des données]
 from pyspark.sql.functions import *
@@ -923,7 +923,7 @@ df_matches_clean.write.format("delta").mode("overwrite") \
   .save(f"{SILVER}/cleaned_matches")
 \end{lstlisting}
 
-\subsubsection*{02\_silver\_to\_gold.ipynb (Extraits)}
+\subsubsection{02\_silver\_to\_gold.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Création des tables Gold]
 df_player_stats = df_players \
@@ -949,7 +949,7 @@ df_hero = df_hero \
 \end{lstlisting}
 
 \newpage
-\subsection*{Code Source du Simulateur de Streaming}
+\subsection{Code Source du Simulateur de Streaming}
 \label{appendix:streaming}
 
 \begin{lstlisting}[language=Python, caption=stream\_simulator.py]
@@ -1000,7 +1000,7 @@ if __name__ == "__main__":
 \end{lstlisting}
 
 \newpage
-\subsection*{Commandes SQL de Création des Tables}
+\subsection{Commandes SQL de Création des Tables}
 \label{appendix:sql}
 
 \begin{lstlisting}[language=SQL, caption=Création du schéma et des tables Gold]
@@ -1021,7 +1021,7 @@ SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection*{Code Source du Modèle ML}
+\subsection{Code Source du Modèle ML}
 \label{appendix:ml}
 
 \begin{lstlisting}[language=Python, caption=Pipeline Machine Learning complet]
@@ -1058,7 +1058,7 @@ print(df_imp.sort_values("Importance", ascending=False))
 \end{lstlisting}
 
 \newpage
-\subsection*{Technologies Utilisées}
+\subsection{Technologies Utilisées}
 \label{appendix:technologies}
 
 \begin{table}[H]

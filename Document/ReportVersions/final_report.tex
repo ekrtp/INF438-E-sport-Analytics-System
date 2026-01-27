@@ -868,13 +868,13 @@ The integrated services offered by the Azure ecosystem enabled rapid and efficie
 
 \newpage
 \appendix
-\section*{APPENDICES}
+\section{APPENDICES}
 \addcontentsline{toc}{section}{Appendices}
 
-\subsection*{Databricks Notebooks Source Code}
+\subsection{Databricks Notebooks Source Code}
 \label{appendix:notebooks}
 
-\subsubsection*{setup\_connection.ipynb}
+\subsubsection{setup\_connection.ipynb}
 
 \begin{lstlisting}[language=Python, caption=Azure ADLS Gen2 connection test]
 # Notebook: setup_connection
@@ -898,7 +898,7 @@ for f in dbutils.fs.ls(BRONZE):
   print(f"  {f.name} ({f.size/1024/1024:.2f} MB)")
 \end{lstlisting}
 
-\subsubsection*{01\_bronze\_to\_silver.ipynb (Extraits)}
+\subsubsection{01\_bronze\_to\_silver.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Data loading and cleaning]
 from pyspark.sql.functions import *
@@ -922,7 +922,7 @@ df_matches_clean.write.format("delta").mode("overwrite") \
   .save(f"{SILVER}/cleaned_matches")
 \end{lstlisting}
 
-\subsubsection*{02\_silver\_to\_gold.ipynb (Extraits)}
+\subsubsection{02\_silver\_to\_gold.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Gold tables creation]
 df_player_stats = df_players \
@@ -948,7 +948,7 @@ df_hero = df_hero \
 \end{lstlisting}
 
 \newpage
-\subsection*{Streaming Simulator Source Code}
+\subsection{Streaming Simulator Source Code}
 \label{appendix:streaming}
 
 \begin{lstlisting}[language=Python, caption=stream\_simulator.py]
@@ -999,7 +999,7 @@ if __name__ == "__main__":
 \end{lstlisting}
 
 \newpage
-\subsection*{Table Creation SQL Commands}
+\subsection{Table Creation SQL Commands}
 \label{appendix:sql}
 
 \begin{lstlisting}[language=SQL, caption=Creation of schema and Gold tables]
@@ -1020,7 +1020,7 @@ SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection*{ML Model Source Code}
+\subsection{ML Model Source Code}
 \label{appendix:ml}
 
 \begin{lstlisting}[language=Python, caption=Complete Machine Learning pipeline]
@@ -1057,7 +1057,7 @@ print(df_imp.sort_values("Importance", ascending=False))
 \end{lstlisting}
 
 \newpage
-\subsection*{Technologies Used}
+\subsection{Technologies Used}
 \label{appendix:technologies}
 
 \begin{table}[H]
