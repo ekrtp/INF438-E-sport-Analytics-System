@@ -684,101 +684,215 @@ Ce graphique sert donc surtout à confirmer qu'il n'existe pas une relation parf
 
 \subsection{Modèle de Machine Learning}
 
-Un modèle de classification binaire a été développé pour prédire le résultat d'un match. La variable cible est \texttt{win} (1 = Victoire, 0 = Défaite).
+Un modèle de classification binaire a été développé afin de prédire l'issue d'un match de Dota 2 professionnel. La variable cible est définie comme \texttt{win} $\in \{0, 1\}$, où 1 représente une victoire et 0 une défaite.
+
+\subsubsection{Sélection des Caractéristiques (Features)}
+
+Le choix des variables explicatives repose sur une analyse préalable des métriques de performance disponibles dans le jeu de données. Les caractéristiques sélectionnées couvrent quatre catégories distinctes, permettant une représentation multidimensionnelle de la performance d'un joueur.
 
 \begin{table}[H]
 \centering
-\caption{Caractéristiques (Features) utilisées}
+\caption{Variables explicatives utilisées pour la modélisation}
 \label{tab:features}
 \begin{tabular}{>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Feature} & \textbf{Description} & \textbf{Catégorie} \\
+\textbf{Variable} & \textbf{Description} & \textbf{Catégorie} \\
 \midrule
-kills & Nombre d'éliminations & Combat \\
-deaths & Nombre de morts & Combat \\
+kills & Nombre d'éliminations effectuées & Combat \\
+deaths & Nombre de morts subies & Combat \\
 assists & Nombre d'assistances & Combat \\
-gold\_per\_min & Or par minute & Économie \\
-xp\_per\_min & Expérience par minute & Économie \\
-hero\_damage & Dégâts aux héros & Dégâts \\
-tower\_damage & Dégâts aux tours & Dégâts \\
-last\_hits & Nombre de last hits & Progression \\
-level & Niveau du joueur & Progression \\
-duration\_minutes & Durée du match & Info Match \\
+gold\_per\_min & Or accumulé par minute & Économie \\
+xp\_per\_min & Expérience acquise par minute & Économie \\
+hero\_damage & Dégâts infligés aux héros adverses & Dégâts \\
+tower\_damage & Dégâts infligés aux structures & Dégâts \\
+last\_hits & Nombre de coups fatals sur les creeps & Progression \\
+level & Niveau atteint en fin de partie & Progression \\
+duration\_minutes & Durée totale du match & Contextuel \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-L'algorithme \textbf{Random Forest Classifier} a été choisi avec les paramètres : numTrees=50, maxDepth=10, Train/Test Split=80\%/20\%.
+\subsubsection{Méthodologie d'Optimisation des Hyperparamètres}
 
-Le code source complet du pipeline ML est disponible en \textbf{Annexe~\ref{appendix:ml}}.
+L'algorithme \textbf{Random Forest Classifier} a été retenu pour cette tâche de classification en raison de sa robustesse face au surapprentissage et de sa capacité à gérer des données hétérogènes sans nécessiter de normalisation préalable.
 
-\subsection{Résultats du Modèle}
+Afin d'identifier la configuration optimale des hyperparamètres, une approche de \textbf{Grid Search} exhaustive combinée à une \textbf{validation croisée stratifiée à 5 plis (5-Fold CV)} a été mise en œuvre. Cette méthodologie permet d'évaluer la capacité de généralisation du modèle tout en minimisant le risque de surapprentissage.
+
+\begin{table}[H]
+\centering
+\caption{Espace de recherche des hyperparamètres}
+\label{tab:param-grid}
+\begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{3cm}}
+\toprule
+\textbf{Hyperparamètre} & \textbf{Valeurs Testées} & \textbf{Cardinalité} \\
+\midrule
+numTrees (nombre d'arbres) & \{30, 50, 100\} & 3 \\
+maxDepth (profondeur maximale) & \{5, 10, 15\} & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+L'espace de recherche comprend $3 \times 3 = 9$ combinaisons distinctes. Chaque configuration a été évaluée sur 5 plis indépendants, résultant en un total de 45 cycles d'entraînement et de validation.
+
+\subsubsection{Résultats de l'Optimisation}
+
+Le Tableau~\ref{tab:tuning-results} présente les performances moyennes obtenues pour chaque combinaison d'hyperparamètres, ordonnées par accuracy décroissante.
+
+\begin{table}[H]
+\centering
+\caption{Performances comparatives des configurations testées (CV Accuracy)}
+\label{tab:tuning-results}
+\begin{tabular}{>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\toprule
+\textbf{numTrees} & \textbf{maxDepth} & \textbf{CV Accuracy (\%)} & \textbf{Rang} \\
+\midrule
+\textbf{50} & \textbf{15} & \textbf{88.70} & 1 \\
+30 & 15 & 88.61 & 2 \\
+100 & 15 & 88.49 & 3 \\
+50 & 10 & 88.49 & 4 \\
+30 & 10 & 88.32 & 5 \\
+100 & 10 & 88.20 & 6 \\
+30 & 5 & 85.96 & 7 \\
+100 & 5 & 85.90 & 8 \\
+50 & 5 & 85.76 & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Observations clés :}
+
+\begin{itemize}
+    \item \textbf{Impact de la profondeur :} Le paramètre \texttt{maxDepth} exerce une influence prépondérante sur les performances. Les modèles configurés avec \texttt{maxDepth=15} affichent systématiquement des accuracy supérieures à ceux limités à \texttt{maxDepth=5}, avec un écart moyen de $\approx$2.8 points de pourcentage.
+    
+    \item \textbf{Impact du nombre d'arbres :} Le paramètre \texttt{numTrees} présente un effet marginal sur les performances. À profondeur égale, la variation d'accuracy entre 30 et 100 arbres demeure inférieure à 0.5\%, suggérant un plateau de performance.
+    
+    \item \textbf{Configuration optimale :} La combinaison \texttt{numTrees=50, maxDepth=15} maximise l'accuracy (88.70\%) tout en maintenant une complexité computationnelle raisonnable.
+\end{itemize}
+
+\subsubsection{Spécification du Modèle Final}
+
+\begin{table}[H]
+\centering
+\caption{Configuration retenue pour le modèle final}
+\label{tab:optimal-params}
+\begin{tabular}{>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{5cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} \\
+\midrule
+Algorithme & Random Forest Classifier \\
+Nombre d'arbres (numTrees) & 50 \\
+Profondeur maximale (maxDepth) & 15 \\
+Stratégie de validation & 5-Fold Cross-Validation \\
+Ratio Train/Test & 80\% / 20\% \\
+Graine aléatoire (seed) & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Évaluation des Performances}
+
+Le modèle final a été évalué sur l'ensemble de test (20\% des données, $n=1674$ observations) afin de mesurer sa capacité de généralisation sur des données non vues lors de l'entraînement.
+
+\subsubsection{Métriques de Performance Globale}
 
 \begin{center}
 \fbox{
-\begin{minipage}{0.7\textwidth}
+\begin{minipage}{0.85\textwidth}
 \centering
 \vspace{0.5cm}
-\textbf{\large RÉSULTATS DU MODÈLE}\\[0.5cm]
+\textbf{\large SYNTHÈSE DES PERFORMANCES}\\[0.5cm]
 \rule{0.9\textwidth}{0.5pt}\\[0.3cm]
-Modèle utilisé : \textbf{Random Forest Classifier}\\[0.3cm]
-Précision (Accuracy) : \textbf{\LARGE 87.34\%}\\[0.3cm]
+\textit{Modèle :} Random Forest Classifier\\[0.1cm]
+\textit{Validation :} Grid Search + 5-Fold Cross-Validation\\[0.3cm]
+\rule{0.9\textwidth}{0.5pt}\\[0.4cm]
+\begin{tabular}{cc}
+{\Large Accuracy : \textbf{87.93\%}} & {\Large Precision : \textbf{86.20\%}} \\[0.3cm]
+{\Large Recall : \textbf{89.58\%}} & {\Large F1-Score : \textbf{87.86\%}} \\
+\end{tabular}
+\\[0.4cm]
 \rule{0.9\textwidth}{0.5pt}
-\vspace{0.5cm}
+\vspace{0.3cm}
 \end{minipage}
 }
 \end{center}
 
+\subsubsection{Matrice de Confusion}
+
+La matrice de confusion ci-dessous détaille la distribution des prédictions par rapport aux valeurs réelles.
+
 \begin{table}[H]
 \centering
-\caption{Matrice de Confusion}
+\caption{Matrice de confusion du modèle sur l'ensemble de test ($n=1674$)}
 \label{tab:confusion-matrix}
-\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Réel / Prédit} & \textbf{Lose (0)} & \textbf{Win (1)} \\
+\textbf{Réel $\backslash$ Prédit} & \textbf{Défaite (0)} & \textbf{Victoire (1)} \\
 \midrule
-\textbf{Lose (0)} & 727 (VN) & 131 (FP) \\
-\textbf{Win (1)} & 81 (FN) & 735 (VP) \\
+\textbf{Défaite (0)} & 741 (VN) & 117 (FP) \\
+\textbf{Victoire (1)} & 85 (FN) & 731 (VP) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Métriques calculées :}
-\begin{itemize}
-    \item Taux de Vrais Positifs (Recall) : $\frac{735}{735+81} = 90.07\%$
-    \item Taux de Vrais Négatifs : $\frac{727}{727+131} = 84.73\%$
-    \item Précision : $\frac{735}{735+131} = 84.87\%$
-\end{itemize}
+\subsubsection{Calcul Détaillé des Métriques}
 
-\subsection{Analyse de l'Importance des Features}
+À partir de la matrice de confusion, les métriques d'évaluation sont calculées comme suit :
+
+\begin{align}
+\text{Accuracy} &= \frac{VP + VN}{VP + VN + FP + FN} = \frac{731 + 741}{1674} = \frac{1472}{1674} = 87.93\% \\[0.3cm]
+\text{Precision} &= \frac{VP}{VP + FP} = \frac{731}{731 + 117} = \frac{731}{848} = 86.20\% \\[0.3cm]
+\text{Recall (Sensibilité)} &= \frac{VP}{VP + FN} = \frac{731}{731 + 85} = \frac{731}{816} = 89.58\% \\[0.3cm]
+\text{Spécificité} &= \frac{VN}{VN + FP} = \frac{741}{741 + 117} = \frac{741}{858} = 86.36\% \\[0.3cm]
+\text{F1-Score} &= 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.8620 \times 0.8958}{0.8620 + 0.8958} = 87.86\%
+\end{align}
+
+Le recall élevé (89.58\%) indique que le modèle identifie correctement la majorité des victoires, tandis que la spécificité comparable (86.36\%) démontre un équilibre satisfaisant dans la détection des deux classes.
+
+\subsection{Analyse de l'Importance des Variables}
+
+L'algorithme Random Forest permet d'estimer l'importance relative de chaque variable via la mesure de \textit{Mean Decrease in Impurity} (MDI). Le Tableau~\ref{tab:feature-importance} présente le classement des variables par ordre d'importance décroissante.
 
 \begin{table}[H]
 \centering
-\caption{Classement de l'importance des features}
+\caption{Importance des variables dans le modèle optimisé (MDI)}
 \label{tab:feature-importance}
-\begin{tabular}{>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{1.5cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2cm}}
 \toprule
-\textbf{Rang} & \textbf{Feature} & \textbf{Importance} \\
+\textbf{Rang} & \textbf{Variable} & \textbf{Importance} & \textbf{Cumul (\%)} & \textbf{Catégorie} \\
 \midrule
-1 & assists & 0.311480 \\
-2 & deaths & 0.204537 \\
-3 & tower\_damage & 0.147192 \\
-4 & xp\_per\_min & 0.073274 \\
-5 & last\_hits & 0.058863 \\
-6 & duration\_minutes & 0.049268 \\
-7 & gold\_per\_min & 0.048150 \\
-8 & kills & 0.040887 \\
-9 & hero\_damage & 0.040081 \\
-10 & level & 0.026267 \\
+1 & assists & 0.2806 & 28.06 & Combat \\
+2 & deaths & 0.1953 & 47.59 & Combat \\
+3 & tower\_damage & 0.1390 & 61.49 & Objectifs \\
+4 & xp\_per\_min & 0.0793 & 69.42 & Économie \\
+5 & last\_hits & 0.0730 & 76.72 & Progression \\
+6 & duration\_minutes & 0.0538 & 82.10 & Contextuel \\
+7 & kills & 0.0517 & 87.27 & Combat \\
+8 & hero\_damage & 0.0516 & 92.43 & Dégâts \\
+9 & gold\_per\_min & 0.0465 & 97.08 & Économie \\
+10 & level & 0.0293 & 100.00 & Progression \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Ces résultats montrent que le \textbf{travail d'équipe} (\texttt{assists} avec 0.311) est le facteur le plus déterminant sur le résultat du match, suivi par la \textbf{survie} (\texttt{deaths} avec 0.205) et les \textbf{dégâts aux objectifs} (\texttt{tower\_damage} avec 0.147).
- 
-Contrairement aux attentes, les facteurs économiques (\texttt{gold\_per\_min} : 0.048, \texttt{xp\_per\_min} : 0.073) ont une importance relativement faible. Cela suggère que dans les matchs professionnels de Dota 2, la coordination d'équipe et le jeu orienté objectifs sont plus prédictifs de la victoire que l'accumulation individuelle de ressources.
+\subsubsection{Interprétation des Résultats}
 
-\subsection{Suivi MLflow}
+L'analyse de l'importance des variables révèle plusieurs insights significatifs concernant les déterminants de la victoire dans les matchs professionnels de Dota 2 :
+
+\begin{enumerate}
+    \item \textbf{Prédominance du jeu collectif :} La variable \texttt{assists} (28.06\%) émerge comme le prédicteur le plus influent, soulignant que la coordination et la synergie d'équipe constituent des facteurs plus déterminants que les performances individuelles isolées.
+    
+    \item \textbf{Importance de la survie :} La variable \texttt{deaths} (19.53\%) occupe la deuxième position. Ce résultat suggère que la minimisation des morts --- et par extension, le maintien de l'avantage économique et de la présence cartographique --- joue un rôle crucial dans l'issue du match.
+    
+    \item \textbf{Orientation vers les objectifs :} La variable \texttt{tower\_damage} (13.90\%) se positionne en troisième place, confirmant que la destruction des structures constitue un indicateur clé de progression vers la victoire.
+    
+    \item \textbf{Rôle secondaire de l'économie :} Contrairement aux hypothèses initiales, les métriques économiques présentent une importance relative modérée (\texttt{gold\_per\_min} : 4.65\%, \texttt{xp\_per\_min} : 7.93\%). Cette observation suggère que dans le contexte professionnel, l'utilisation stratégique des ressources prime sur leur simple accumulation.
+    
+    \item \textbf{Contribution limitée des éliminations :} La variable \texttt{kills} (5.17\%) affiche une importance étonnamment faible, indiquant que les éliminations ne garantissent pas la victoire sans conversion en avantages objectifs tangibles.
+\end{enumerate}
+
+Ces résultats corroborent la nature hautement stratégique et collaborative du jeu Dota 2 au niveau professionnel, où la coordination d'équipe et le jeu orienté objectifs surpassent les exploits individuels.
+
+\subsection{Suivi des Expériences avec MLflow}
 
 Toutes les expériences de modèle ont été automatiquement suivies sur MLflow avec \texttt{mlflow.autolog()}.
 

@@ -689,101 +689,231 @@ Bu grafik bu nedenle mükemmel doğrusal bir ilişkinin olmadığını, daha ço
 
 \subsection{Makine Öğrenmesi Modeli}
 
-Maç sonucunu tahmin etmek için bir ikili sınıflandırma modeli geliştirilmiştir. Hedef değişken \texttt{win}'dir (1 = Kazanma, 0 = Kaybetme).
+Profesyonel bir Dota 2 maçının sonucunu tahmin etmek için ikili sınıflandırma modeli geliştirilmiştir. Hedef değişken \texttt{win} $\in \{0, 1\}$ olarak tanımlanmış olup, 1 galibiyeti ve 0 mağlubiyeti temsil etmektedir.
+
+\subsubsection{Özellik Seçimi (Feature Selection)}
+
+Açıklayıcı değişkenlerin seçimi, veri setinde mevcut performans metriklerinin ön analizine dayanmaktadır. Seçilen özellikler dört farklı kategoriyi kapsamakta olup, oyuncu performansının çok boyutlu bir temsilini sağlamaktadır.
 
 \begin{table}[H]
 \centering
-\caption{Kullanılan Özellikler (Features)}
+\caption{Modelleme için kullanılan açıklayıcı değişkenler}
 \label{tab:features}
 \begin{tabular}{>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Feature} & \textbf{Açıklama} & \textbf{Kategori} \\
+\textbf{Değişken} & \textbf{Açıklama} & \textbf{Kategori} \\
 \midrule
-kills & Öldürme Sayısı & Savaş \\
-deaths & Ölüm Sayısı & Savaş \\
-assists & Asist Sayısı & Savaş \\
-gold\_per\_min & Dakika başına altın & Ekonomi \\
-xp\_per\_min & Dakika başına tecrübe (XP) & Ekonomi \\
-hero\_damage & Kahraman hasarı & Hasar \\
-tower\_damage & Kule hasarı & Hasar \\
-last\_hits & Son vuruş sayısı & İlerleme \\
-level & Oyuncu seviyesi & İlerleme \\
-duration\_minutes & Maç süresi & Maç Bilgisi \\
+kills & Gerçekleştirilen öldürme sayısı & Savaş \\
+deaths & Yaşanan ölüm sayısı & Savaş \\
+assists & Asist sayısı & Savaş \\
+gold\_per\_min & Dakika başına biriken altın & Ekonomi \\
+xp\_per\_min & Dakika başına kazanılan deneyim & Ekonomi \\
+hero\_damage & Düşman kahramanlara verilen hasar & Hasar \\
+tower\_damage & Yapılara verilen hasar & Hasar \\
+last\_hits & Creep'lere yapılan son vuruş sayısı & İlerleme \\
+level & Oyun sonunda ulaşılan seviye & İlerleme \\
+duration\_minutes & Toplam maç süresi & Bağlamsal \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Random Forest Classifier} algoritması şu parametrelerle seçilmiştir: numTrees=50, maxDepth=10, Train/Test Split=80\%/20\%.
+\subsubsection{Hiperparametre Optimizasyon Metodolojisi}
 
-ML pipeline'ının tam kaynak kodu \textbf{Ek~\ref{appendix:ml}}'de mevcuttur.
+Bu sınıflandırma görevi için \textbf{Random Forest Classifier} algoritması, aşırı öğrenmeye karşı dayanıklılığı ve önceden normalleştirme gerektirmeden heterojen verileri işleme kapasitesi nedeniyle seçilmiştir.
 
-\subsection{Model Sonuçları}
+Optimal hiperparametre konfigürasyonunu belirlemek için, \textbf{tabakalı 5-katlı çapraz doğrulama (5-Fold CV)} ile birleştirilmiş kapsamlı bir \textbf{Grid Search} yaklaşımı uygulanmıştır. Bu metodoloji, aşırı öğrenme riskini minimize ederken modelin genelleme kapasitesinin objektif değerlendirmesini sağlar.
+
+\begin{table}[H]
+\centering
+\caption{Hiperparametre arama uzayı}
+\label{tab:param-grid}
+\begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{3cm}}
+\toprule
+\textbf{Hiperparametre} & \textbf{Test Edilen Değerler} & \textbf{Kardinalite} \\
+\midrule
+numTrees (ağaç sayısı) & \{30, 50, 100\} & 3 \\
+maxDepth (maksimum derinlik) & \{5, 10, 15\} & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Arama uzayı $3 \times 3 = 9$ farklı kombinasyon içermektedir. Her konfigürasyon 5 bağımsız katlama üzerinde değerlendirilmiş, toplamda 45 eğitim ve doğrulama döngüsü gerçekleştirilmiştir.
+
+\subsubsection{Optimizasyon Sonuçları}
+
+Tablo~\ref{tab:tuning-results}, her hiperparametre kombinasyonu için elde edilen ortalama performansı azalan doğruluk sırasına göre sunmaktadır.
+
+\begin{table}[H]
+\centering
+\caption{Test edilen konfigürasyonların karşılaştırmalı performansı (CV Accuracy)}
+\label{tab:tuning-results}
+\begin{tabular}{>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\toprule
+\textbf{numTrees} & \textbf{maxDepth} & \textbf{CV Accuracy (\%)} & \textbf{Sıra} \\
+\midrule
+\textbf{50} & \textbf{15} & \textbf{88.70} & 1 \\
+30 & 15 & 88.61 & 2 \\
+100 & 15 & 88.49 & 3 \\
+50 & 10 & 88.49 & 4 \\
+30 & 10 & 88.32 & 5 \\
+100 & 10 & 88.20 & 6 \\
+30 & 5 & 85.96 & 7 \\
+100 & 5 & 85.90 & 8 \\
+50 & 5 & 85.76 & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Temel gözlemler:}
+
+\begin{itemize}
+    \item \textbf{Derinliğin etkisi:} \texttt{maxDepth} parametresi performans üzerinde baskın bir etki göstermektedir. \texttt{maxDepth=15} ile yapılandırılmış modeller, \texttt{maxDepth=5} ile sınırlı olanları sürekli olarak geçmekte ve ortalama $\approx$2.8 yüzde puanlık bir fark oluşturmaktadır.
+    
+    \item \textbf{Ağaç sayısının etkisi:} \texttt{numTrees} parametresi performans üzerinde marjinal bir etkiye sahiptir. Eşit derinlikte, 30 ile 100 ağaç arasındaki doğruluk varyasyonu \%0.5'in altında kalmakta ve bir performans platosuna işaret etmektedir.
+    
+    \item \textbf{Optimal konfigürasyon:} \texttt{numTrees=50, maxDepth=15} kombinasyonu, makul hesaplama karmaşıklığını korurken doğruluğu (\%88.70) maksimize etmektedir.
+\end{itemize}
+
+\subsubsection{Final Model Spesifikasyonu}
+
+\begin{table}[H]
+\centering
+\caption{Final model için seçilen konfigürasyon}
+\label{tab:optimal-params}
+\begin{tabular}{>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{5cm}}
+\toprule
+\textbf{Parametre} & \textbf{Değer} \\
+\midrule
+Algoritma & Random Forest Classifier \\
+Ağaç sayısı (numTrees) & 50 \\
+Maksimum derinlik (maxDepth) & 15 \\
+Doğrulama stratejisi & 5-Fold Cross-Validation \\
+Train/Test oranı & \%80 / \%20 \\
+Rastgele tohum (seed) & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Performans Değerlendirmesi}
+
+Final model, eğitim sırasında görülmeyen veriler üzerindeki genelleme kapasitesini ölçmek için test seti (verilerin \%20'si, $n=1674$ gözlem) üzerinde değerlendirilmiştir.
+
+\subsubsection{Genel Performans Metrikleri}
 
 \begin{center}
 \fbox{
-\begin{minipage}{0.7\textwidth}
+\begin{minipage}{0.85\textwidth}
 \centering
 \vspace{0.5cm}
-\textbf{\large MODEL SONUÇLARI}\\[0.5cm]
+\textbf{\large PERFORMANS ÖZETİ}\\[0.5cm]
 \rule{0.9\textwidth}{0.5pt}\\[0.3cm]
-Kullanılan Model: \textbf{Random Forest Classifier}\\[0.3cm]
-Doğruluk (Accuracy): \textbf{\LARGE 87.34\%}\\[0.3cm]
+\textit{Model:} Random Forest Classifier\\[0.1cm]
+\textit{Doğrulama:} Grid Search + 5-Fold Cross-Validation\\[0.3cm]
+\rule{0.9\textwidth}{0.5pt}\\[0.4cm]
+\begin{tabular}{cc}
+{\Large Accuracy: \textbf{\%87.93}} & {\Large Precision: \textbf{\%86.20}} \\[0.3cm]
+{\Large Recall: \textbf{\%89.58}} & {\Large F1-Score: \textbf{\%87.86}} \\
+\end{tabular}
+\\[0.4cm]
 \rule{0.9\textwidth}{0.5pt}
-\vspace{0.5cm}
+\vspace{0.3cm}
 \end{minipage}
 }
 \end{center}
 
+\subsubsection{Karışıklık Matrisi (Confusion Matrix)}
+
+Aşağıdaki karışıklık matrisi, tahminlerin gerçek değerlere göre dağılımını detaylandırmaktadır.
+
 \begin{table}[H]
 \centering
-\caption{Karışıklık Matrisi (Confusion Matrix)}
+\caption{Test seti üzerinde modelin karışıklık matrisi ($n=1674$)}
 \label{tab:confusion-matrix}
-\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Gerçek / Tahmin} & \textbf{Kaybetme (0)} & \textbf{Kazanma (1)} \\
+\textbf{Gerçek $\backslash$ Tahmin} & \textbf{Mağlubiyet (0)} & \textbf{Galibiyet (1)} \\
 \midrule
-\textbf{Kaybetme (0)} & 727 (GN) & 131 (YP) \\
-\textbf{Kazanma (1)} & 81 (YN) & 735 (GP) \\
+\textbf{Mağlubiyet (0)} & 741 (GN) & 117 (YP) \\
+\textbf{Galibiyet (1)} & 85 (YN) & 731 (GP) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Hesaplanan Metrikler :}
-\begin{itemize}
-    \item Gerçek Pozitif Oranı (Recall) : $\frac{735}{735+81} = 90.07\%$
-    \item Gerçek Negatif Oranı : $\frac{727}{727+131} = 84.73\%$
-    \item Kesinlik (Precision) : $\frac{735}{735+131} = 84.87\%$
-\end{itemize}
+\subsubsection{Detaylı Metrik Hesaplaması}
+
+Karışıklık matrisinden, değerlendirme metrikleri aşağıdaki gibi hesaplanmaktadır:
+
+\begin{align}
+\text{Accuracy} &= \frac{GP + GN}{GP + GN + YP + YN} = \frac{731 + 741}{1674} = \frac{1472}{1674} = \%87.93 \\[0.3cm]
+\text{Precision} &= \frac{GP}{GP + YP} = \frac{731}{731 + 117} = \frac{731}{848} = \%86.20 \\[0.3cm]
+\text{Recall (Duyarlılık)} &= \frac{GP}{GP + YN} = \frac{731}{731 + 85} = \frac{731}{816} = \%89.58 \\[0.3cm]
+\text{Özgüllük} &= \frac{GN}{GN + YP} = \frac{741}{741 + 117} = \frac{741}{858} = \%86.36 \\[0.3cm]
+\text{F1-Score} &= 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.8620 \times 0.8958}{0.8620 + 0.8958} = \%87.86
+\end{align}
+
+Yüksek recall (\%89.58), modelin galibiyetlerin çoğunu doğru şekilde tanımladığını gösterirken, karşılaştırılabilir özgüllük (\%86.36) her iki sınıfın tespitinde tatmin edici bir denge olduğunu ortaya koymaktadır.
 
 \subsection{Özellik Önem Analizi}
 
+Random Forest algoritması, \textit{Mean Decrease in Impurity} (MDI) ölçüsü aracılığıyla her değişkenin göreli öneminin tahmin edilmesini sağlar. Tablo~\ref{tab:feature-importance}, değişken sıralamasını azalan önem sırasına göre sunmaktadır.
+
 \begin{table}[H]
 \centering
-\caption{Özellik Önem Sıralaması}
+\caption{Optimize edilmiş modelde değişken önemi (MDI)}
 \label{tab:feature-importance}
-\begin{tabular}{>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{1.5cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2cm}}
 \toprule
-\textbf{Sıra} & \textbf{Feature} & \textbf{Önem} \\
+\textbf{Sıra} & \textbf{Değişken} & \textbf{Önem} & \textbf{Kümülatif (\%)} & \textbf{Kategori} \\
 \midrule
-1 & assists & 0.311480 \\
-2 & deaths & 0.204537 \\
-3 & tower\_damage & 0.147192 \\
-4 & xp\_per\_min & 0.073274 \\
-5 & last\_hits & 0.058863 \\
-6 & duration\_minutes & 0.049268 \\
-7 & gold\_per\_min & 0.048150 \\
-8 & kills & 0.040887 \\
-9 & hero\_damage & 0.040081 \\
-10 & level & 0.026267 \\
+1 & assists & 0.2806 & 28.06 & Savaş \\
+2 & deaths & 0.1953 & 47.59 & Savaş \\
+3 & tower\_damage & 0.1390 & 61.49 & Hedefler \\
+4 & xp\_per\_min & 0.0793 & 69.42 & Ekonomi \\
+5 & last\_hits & 0.0730 & 76.72 & İlerleme \\
+6 & duration\_minutes & 0.0538 & 82.10 & Bağlamsal \\
+7 & kills & 0.0517 & 87.27 & Savaş \\
+8 & hero\_damage & 0.0516 & 92.43 & Hasar \\
+9 & gold\_per\_min & 0.0465 & 97.08 & Ekonomi \\
+10 & level & 0.0293 & 100.00 & İlerleme \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Bu sonuçlar, \textbf{takım çalışmasının} (0.311 ile \texttt{assists}) maç sonucu üzerinde en belirleyici faktör olduğunu, bunu \textbf{hayatta kalmanın} (0.205 ile \texttt{deaths}) ve \textbf{hedef hasarının} (0.147 ile \texttt{tower\_damage}) izlediğini göstermektedir.
+\subsubsection{Sonuçların Yorumlanması}
 
-Beklentilerin aksine, ekonomik faktörler (\texttt{gold\_per\_min}: 0.048, \texttt{xp\_per\_min}: 0.073) nispeten düşük öneme sahiptir. Bu, profesyonel Dota 2 maçlarında takım koordinasyonunun ve hedef odaklı oyunun, bireysel kaynak birikiminden daha fazla zafer öngördürücü olduğunu göstermektedir.
+Özellik önem analizi, profesyonel Dota 2 maçlarında galibiyet belirleyicileri hakkında birkaç önemli içgörü ortaya koymaktadır:
 
-\subsection{MLflow Takibi}
+\begin{enumerate}
+    \item \textbf{Takım oyununun baskınlığı:} \texttt{assists} değişkeni (\%28.06) en etkili tahmin edici olarak öne çıkmakta ve koordinasyon ile takım sinerjisinin izole bireysel performanslardan daha belirleyici faktörler olduğunu vurgulamaktadır.
+    
+    \item \textbf{Hayatta kalmanın önemi:} \texttt{deaths} değişkeni (\%19.53) ikinci sırada yer almaktadır. Bu sonuç, ölümlerin minimize edilmesinin --- ve dolayısıyla ekonomik avantajın ve harita varlığının korunmasının --- maç sonucunda kritik bir rol oynadığını göstermektedir.
+    
+    \item \textbf{Hedef odaklılık:} \texttt{tower\_damage} değişkeni (\%13.90) üçüncü sırada yer alarak, yapı yıkımının galibiyete doğru ilerlemenin önemli bir göstergesi olduğunu doğrulamaktadır.
+    
+    \item \textbf{Ekonominin ikincil rolü:} İlk hipotezlerin aksine, ekonomik metrikler orta düzeyde göreli öneme sahiptir (\texttt{gold\_per\_min}: \%4.65, \texttt{xp\_per\_min}: \%7.93). Bu gözlem, profesyonel bağlamda kaynakların stratejik kullanımının salt birikimden önce geldiğini göstermektedir.
+    
+    \item \textbf{Öldürmelerin sınırlı katkısı:} \texttt{kills} değişkeni (\%5.17) şaşırtıcı derecede düşük bir önem sergilemekte ve öldürmelerin tek başına somut hedef avantajlarına dönüştürülmeden galibiyeti garanti etmediğini göstermektedir.
+\end{enumerate}
+
+Bu sonuçlar, profesyonel seviyede Dota 2'nin son derece stratejik ve işbirlikçi doğasını doğrulamakta olup, takım koordinasyonu ve hedef odaklı oyunun bireysel başarıları geçtiğini ortaya koymaktadır.
+
+\subsection{MLflow ile Deney Takibi}
+
+Tüm model deneyleri \texttt{mlflow.autolog()} kullanılarak MLflow üzerinde otomatik olarak izlenmiştir. Bu yaklaşım şunları sağlar:
+
+\begin{itemize}
+    \item Test edilen tüm parametrelerin otomatik kaydı
+    \item Her çapraz doğrulama iterasyonunun metriklerinin saklanması
+    \item Gelecekteki dağıtım için en iyi modelin depolanması
+    \item Deney tekrarlanabilirliğinin sağlanması
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.75\textheight, keepaspectratio]{../Screenshots/Picture9}
+\caption{MLflow arayüzünde model sonuçları ve parametreler}
+\label{fig:mlflow-results}
+\end{figure}
 
 Tüm model denemeleri \texttt{mlflow.autolog()} ile MLflow üzerinde otomatik olarak izlenmiştir.
 
@@ -853,7 +983,8 @@ Medallion Mimarisi & Bronze/Silver/Gold katmanları kuruldu \\
 Veri İşleme & 29.809 maç, 8.456 oyuncu işlendi \\
 Streaming Simülasyonu & Bronze katmanına 10 mini-batch yazıldı \\
 Gold Tabloları & 4 analitik tablo (813 oyuncu, 123 kahraman) \\
-ML Modeli & \%87.34 doğruluk oranlı Random Forest \\
+Hiperparametre Ayarlama & 5-Fold CV ile 9 kombinasyon test edildi \\
+ML Modeli & \%87.93 doğruluk oranlı Random Forest \\
 Meta Analizi & 5 seviyeli kahraman sınıflandırması \\
 \bottomrule
 \end{tabular}
@@ -1026,7 +1157,87 @@ SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection{ML Model Kaynak Kodu}
+\subsection{ML Model Kaynak Kodu (Hiperparametre Ayarlama ile)}
+\label{appendix:ml}
+
+\begin{lstlisting}[language=Python, caption=Grid Search ve Cross-Validation ile Makine Öğrenmesi Pipeline'ı]
+import mlflow
+import pandas as pd
+from pyspark.sql.functions import col
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.classification import RandomForestClassifier
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
+from pyspark.ml import Pipeline
+
+# Baglanti yapilandirmasi
+storage_account = "dota2lakehousenew"
+container = "data"
+access_key = "***" # Guvenlik icin maskelenmis anahtar
+
+spark.conf.set(
+    f"fs.azure.account.key.{storage_account}.dfs.core.windows.net",
+    access_key)
+
+# Gold verilerini yukle
+gold_path = f"abfss://{container}@{storage_account}.dfs.core.windows.net/gold/ml_features"
+df = spark.read.format("delta").load(gold_path)
+
+# Ozellik secimi
+selected_cols = ["kills", "deaths", "assists", "gold_per_min", 
+    "xp_per_min", "hero_damage", "tower_damage", "last_hits", 
+    "level", "duration_minutes", "win"]
+data = df.select(selected_cols).dropna()
+
+# Train/Test bolunmesi
+train_data, test_data = data.randomSplit([0.8, 0.2], seed=42)
+
+# ML Pipeline
+feature_cols = [c for c in selected_cols if c != "win"]
+assembler = VectorAssembler(inputCols=feature_cols, outputCol="features")
+rf = RandomForestClassifier(labelCol="win", featuresCol="features", seed=42)
+pipeline = Pipeline(stages=[assembler, rf])
+
+# Grid Search - Parametre grid tanimlamasi
+paramGrid = ParamGridBuilder() \
+    .addGrid(rf.numTrees, [30, 50, 100]) \
+    .addGrid(rf.maxDepth, [5, 10, 15]) \
+    .build()
+
+# Degerlendirici
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="win", predictionCol="prediction", metricName="accuracy")
+
+# Cross-Validator (5-Fold)
+crossValidator = CrossValidator(
+    estimator=pipeline,
+    estimatorParamMaps=paramGrid,
+    evaluator=evaluator,
+    numFolds=5,
+    seed=42)
+
+# MLflow takibi ile egitim
+mlflow.autolog()
+cvModel = crossValidator.fit(train_data)
+bestModel = cvModel.bestModel
+bestRF = bestModel.stages[-1]
+
+# Sonuclari goster
+print(f"En iyi parametreler: numTrees={bestRF.getNumTrees}, maxDepth={bestRF.getMaxDepth()}")
+
+# Final degerlendirmesi
+predictions = bestModel.transform(test_data)
+accuracy = evaluator.evaluate(predictions)
+print(f"Accuracy: {accuracy*100:.2f}%")
+
+# Ozellik Onemi
+importances = bestRF.featureImportances.toArray()
+df_importance = pd.DataFrame({
+    "Feature": feature_cols,
+    "Importance": importances
+}).sort_values("Importance", ascending=False)
+print(df_importance)
+\end{lstlisting}
 \label{appendix:ml}
 
 \begin{lstlisting}[language=Python, caption=Tam Makine Öğrenmesi Pipeline'ı]

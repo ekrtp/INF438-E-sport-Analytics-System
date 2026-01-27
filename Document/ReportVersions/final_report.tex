@@ -684,101 +684,231 @@ This chart therefore mainly serves to confirm that there is no perfectly linear 
 
 \subsection{Machine Learning Model}
 
-A binary classification model was developed to predict match outcome. The target variable is \texttt{win} (1 = Win, 0 = Loss).
+A binary classification model was developed to predict the outcome of a professional Dota 2 match. The target variable is defined as \texttt{win} $\in \{0, 1\}$, where 1 represents a victory and 0 a defeat.
+
+\subsubsection{Feature Selection}
+
+The selection of explanatory variables is based on a preliminary analysis of performance metrics available in the dataset. The selected features cover four distinct categories, enabling a multidimensional representation of player performance.
 
 \begin{table}[H]
 \centering
-\caption{Features used}
+\caption{Explanatory variables used for modeling}
 \label{tab:features}
 \begin{tabular}{>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Feature} & \textbf{Description} & \textbf{Category} \\
+\textbf{Variable} & \textbf{Description} & \textbf{Category} \\
 \midrule
-kills & Number of kills & Combat \\
-deaths & Number of deaths & Combat \\
+kills & Number of eliminations performed & Combat \\
+deaths & Number of deaths suffered & Combat \\
 assists & Number of assists & Combat \\
-gold\_per\_min & Gold per minute & Economy \\
-xp\_per\_min & Experience per minute & Economy \\
-hero\_damage & Hero damage & Damage \\
-tower\_damage & Tower damage & Damage \\
-last\_hits & Number of last hits & Progression \\
-level & Player level & Progression \\
-duration\_minutes & Match duration & Match Info \\
+gold\_per\_min & Gold accumulated per minute & Economy \\
+xp\_per\_min & Experience gained per minute & Economy \\
+hero\_damage & Damage dealt to enemy heroes & Damage \\
+tower\_damage & Damage dealt to structures & Damage \\
+last\_hits & Number of last hits on creeps & Progression \\
+level & Level reached at end of game & Progression \\
+duration\_minutes & Total match duration & Contextual \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The \textbf{Random Forest Classifier} algorithm was chosen with parameters: numTrees=50, maxDepth=10, Train/Test Split=80\%/20\%.
+\subsubsection{Hyperparameter Optimization Methodology}
 
-The complete ML pipeline source code is available in \textbf{Appendix~\ref{appendix:ml}}.
+The \textbf{Random Forest Classifier} algorithm was selected for this classification task due to its robustness against overfitting and its ability to handle heterogeneous data without requiring prior normalization.
 
-\subsection{Model Results}
+To identify the optimal hyperparameter configuration, an exhaustive \textbf{Grid Search} approach combined with \textbf{stratified 5-fold cross-validation (5-Fold CV)} was implemented. This methodology enables objective evaluation of the model's generalization capability while minimizing the risk of overfitting.
+
+\begin{table}[H]
+\centering
+\caption{Hyperparameter search space}
+\label{tab:param-grid}
+\begin{tabular}{>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{3cm}}
+\toprule
+\textbf{Hyperparameter} & \textbf{Values Tested} & \textbf{Cardinality} \\
+\midrule
+numTrees (number of trees) & \{30, 50, 100\} & 3 \\
+maxDepth (maximum depth) & \{5, 10, 15\} & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The search space comprises $3 \times 3 = 9$ distinct combinations. Each configuration was evaluated on 5 independent folds, resulting in a total of 45 training and validation cycles.
+
+\subsubsection{Optimization Results}
+
+Table~\ref{tab:tuning-results} presents the average performance obtained for each hyperparameter combination, ordered by decreasing accuracy.
+
+\begin{table}[H]
+\centering
+\caption{Comparative performance of tested configurations (CV Accuracy)}
+\label{tab:tuning-results}
+\begin{tabular}{>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{3.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\toprule
+\textbf{numTrees} & \textbf{maxDepth} & \textbf{CV Accuracy (\%)} & \textbf{Rank} \\
+\midrule
+\textbf{50} & \textbf{15} & \textbf{88.70} & 1 \\
+30 & 15 & 88.61 & 2 \\
+100 & 15 & 88.49 & 3 \\
+50 & 10 & 88.49 & 4 \\
+30 & 10 & 88.32 & 5 \\
+100 & 10 & 88.20 & 6 \\
+30 & 5 & 85.96 & 7 \\
+100 & 5 & 85.90 & 8 \\
+50 & 5 & 85.76 & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key observations:}
+
+\begin{itemize}
+    \item \textbf{Impact of depth:} The \texttt{maxDepth} parameter exerts a predominant influence on performance. Models configured with \texttt{maxDepth=15} consistently outperform those limited to \texttt{maxDepth=5}, with an average gap of $\approx$2.8 percentage points.
+    
+    \item \textbf{Impact of number of trees:} The \texttt{numTrees} parameter has a marginal effect on performance. At equal depth, the accuracy variation between 30 and 100 trees remains below 0.5\%, suggesting a performance plateau.
+    
+    \item \textbf{Optimal configuration:} The combination \texttt{numTrees=50, maxDepth=15} maximizes accuracy (88.70\%) while maintaining reasonable computational complexity.
+\end{itemize}
+
+\subsubsection{Final Model Specification}
+
+\begin{table}[H]
+\centering
+\caption{Configuration selected for the final model}
+\label{tab:optimal-params}
+\begin{tabular}{>{\centering\arraybackslash}m{5cm}>{\centering\arraybackslash}m{5cm}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Algorithm & Random Forest Classifier \\
+Number of trees (numTrees) & 50 \\
+Maximum depth (maxDepth) & 15 \\
+Validation strategy & 5-Fold Cross-Validation \\
+Train/Test ratio & 80\% / 20\% \\
+Random seed & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Performance Evaluation}
+
+The final model was evaluated on the test set (20\% of data, $n=1674$ observations) to measure its generalization capability on unseen data.
+
+\subsubsection{Global Performance Metrics}
 
 \begin{center}
 \fbox{
-\begin{minipage}{0.7\textwidth}
+\begin{minipage}{0.85\textwidth}
 \centering
 \vspace{0.5cm}
-\textbf{\large MODEL RESULTS}\\[0.5cm]
+\textbf{\large PERFORMANCE SUMMARY}\\[0.5cm]
 \rule{0.9\textwidth}{0.5pt}\\[0.3cm]
-Model used: \textbf{Random Forest Classifier}\\[0.3cm]
-Accuracy: \textbf{\LARGE 87.34\%}\\[0.3cm]
+\textit{Model:} Random Forest Classifier\\[0.1cm]
+\textit{Validation:} Grid Search + 5-Fold Cross-Validation\\[0.3cm]
+\rule{0.9\textwidth}{0.5pt}\\[0.4cm]
+\begin{tabular}{cc}
+{\Large Accuracy: \textbf{87.93\%}} & {\Large Precision: \textbf{86.20\%}} \\[0.3cm]
+{\Large Recall: \textbf{89.58\%}} & {\Large F1-Score: \textbf{87.86\%}} \\
+\end{tabular}
+\\[0.4cm]
 \rule{0.9\textwidth}{0.5pt}
-\vspace{0.5cm}
+\vspace{0.3cm}
 \end{minipage}
 }
 \end{center}
 
+\subsubsection{Confusion Matrix}
+
+The confusion matrix below details the distribution of predictions relative to actual values.
+
 \begin{table}[H]
 \centering
-\caption{Confusion Matrix}
+\caption{Model confusion matrix on test set ($n=1674$)}
 \label{tab:confusion-matrix}
-\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{3cm}|>{\centering\arraybackslash}m{3cm}>{\centering\arraybackslash}m{3cm}}
 \toprule
-\textbf{Actual / Predicted} & \textbf{Lose (0)} & \textbf{Win (1)} \\
+\textbf{Actual $\backslash$ Predicted} & \textbf{Loss (0)} & \textbf{Win (1)} \\
 \midrule
-\textbf{Lose (0)} & 727 (TN) & 131 (FP) \\
-\textbf{Win (1)} & 81 (FN) & 735 (TP) \\
+\textbf{Loss (0)} & 741 (TN) & 117 (FP) \\
+\textbf{Win (1)} & 85 (FN) & 731 (TP) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Calculated metrics:}
-\begin{itemize}
-    \item True Positive Rate (Recall): $\frac{735}{735+81} = 90.07\%$
-    \item True Negative Rate: $\frac{727}{727+131} = 84.73\%$
-    \item Precision: $\frac{735}{735+131} = 84.87\%$
-\end{itemize}
+\subsubsection{Detailed Metrics Calculation}
+
+From the confusion matrix, evaluation metrics are calculated as follows:
+
+\begin{align}
+\text{Accuracy} &= \frac{TP + TN}{TP + TN + FP + FN} = \frac{731 + 741}{1674} = \frac{1472}{1674} = 87.93\% \\[0.3cm]
+\text{Precision} &= \frac{TP}{TP + FP} = \frac{731}{731 + 117} = \frac{731}{848} = 86.20\% \\[0.3cm]
+\text{Recall (Sensitivity)} &= \frac{TP}{TP + FN} = \frac{731}{731 + 85} = \frac{731}{816} = 89.58\% \\[0.3cm]
+\text{Specificity} &= \frac{TN}{TN + FP} = \frac{741}{741 + 117} = \frac{741}{858} = 86.36\% \\[0.3cm]
+\text{F1-Score} &= 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.8620 \times 0.8958}{0.8620 + 0.8958} = 87.86\%
+\end{align}
+
+The high recall (89.58\%) indicates that the model correctly identifies the majority of wins, while the comparable specificity (86.36\%) demonstrates satisfactory balance in detecting both classes.
 
 \subsection{Feature Importance Analysis}
 
+The Random Forest algorithm enables estimation of the relative importance of each variable via the \textit{Mean Decrease in Impurity} (MDI) measure. Table~\ref{tab:feature-importance} presents the variable ranking in decreasing order of importance.
+
 \begin{table}[H]
 \centering
-\caption{Feature importance ranking}
+\caption{Variable importance in the optimized model (MDI)}
 \label{tab:feature-importance}
-\begin{tabular}{>{\centering\arraybackslash}m{2cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{4cm}}
+\begin{tabular}{>{\centering\arraybackslash}m{1.5cm}>{\centering\arraybackslash}m{4cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2.5cm}>{\centering\arraybackslash}m{2cm}}
 \toprule
-\textbf{Rank} & \textbf{Feature} & \textbf{Importance} \\
+\textbf{Rank} & \textbf{Variable} & \textbf{Importance} & \textbf{Cumulative (\%)} & \textbf{Category} \\
 \midrule
-1 & assists & 0.311480 \\
-2 & deaths & 0.204537 \\
-3 & tower\_damage & 0.147192 \\
-4 & xp\_per\_min & 0.073274 \\
-5 & last\_hits & 0.058863 \\
-6 & duration\_minutes & 0.049268 \\
-7 & gold\_per\_min & 0.048150 \\
-8 & kills & 0.040887 \\
-9 & hero\_damage & 0.040081 \\
-10 & level & 0.026267 \\
+1 & assists & 0.2806 & 28.06 & Combat \\
+2 & deaths & 0.1953 & 47.59 & Combat \\
+3 & tower\_damage & 0.1390 & 61.49 & Objectives \\
+4 & xp\_per\_min & 0.0793 & 69.42 & Economy \\
+5 & last\_hits & 0.0730 & 76.72 & Progression \\
+6 & duration\_minutes & 0.0538 & 82.10 & Contextual \\
+7 & kills & 0.0517 & 87.27 & Combat \\
+8 & hero\_damage & 0.0516 & 92.43 & Damage \\
+9 & gold\_per\_min & 0.0465 & 97.08 & Economy \\
+10 & level & 0.0293 & 100.00 & Progression \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-These results show that \textbf{teamwork} (\texttt{assists} with 0.311) is the most determining factor on match outcome, followed by \textbf{survival} (\texttt{deaths} with 0.205) and \textbf{objective damage} (\texttt{tower\_damage} with 0.147).
- 
-Contrary to expectations, economic factors (\texttt{gold\_per\_min}: 0.048, \texttt{xp\_per\_min}: 0.073) have relatively low importance. This suggests that in professional Dota 2 matches, team coordination and objective-oriented play are more predictive of victory than individual resource accumulation.
+\subsubsection{Results Interpretation}
 
-\subsection{MLflow Tracking}
+The feature importance analysis reveals several significant insights regarding victory determinants in professional Dota 2 matches:
+
+\begin{enumerate}
+    \item \textbf{Team play predominance:} The \texttt{assists} variable (28.06\%) emerges as the most influential predictor, highlighting that coordination and team synergy constitute more determining factors than isolated individual performances.
+    
+    \item \textbf{Importance of survival:} The \texttt{deaths} variable (19.53\%) occupies second position. This result suggests that minimizing deaths --- and by extension, maintaining economic advantage and map presence --- plays a crucial role in match outcome.
+    
+    \item \textbf{Objective orientation:} The \texttt{tower\_damage} variable (13.90\%) ranks third, confirming that structure destruction constitutes a key indicator of progression toward victory.
+    
+    \item \textbf{Secondary role of economy:} Contrary to initial hypotheses, economic metrics present moderate relative importance (\texttt{gold\_per\_min}: 4.65\%, \texttt{xp\_per\_min}: 7.93\%). This observation suggests that in the professional context, strategic use of resources takes precedence over their mere accumulation.
+    
+    \item \textbf{Limited contribution of eliminations:} The \texttt{kills} variable (5.17\%) displays surprisingly low importance, indicating that eliminations alone do not guarantee victory without conversion into tangible objective advantages.
+\end{enumerate}
+
+These results corroborate the highly strategic and collaborative nature of Dota 2 at the professional level, where team coordination and objective-oriented play surpass individual exploits.
+
+\subsection{Experiment Tracking with MLflow}
+
+All model experiments were automatically tracked on MLflow using \texttt{mlflow.autolog()}. This approach enables:
+
+\begin{itemize}
+    \item Automatic recording of all tested parameters
+    \item Saving metrics from each cross-validation iteration
+    \item Storing the best model for future deployment
+    \item Ensuring experiment reproducibility
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.75\textheight, keepaspectratio]{../Screenshots/Picture9}
+\caption{Model results and parameters in MLflow interface}
+\label{fig:mlflow-results}
+\end{figure}
 
 All model experiments were automatically tracked on MLflow with \texttt{mlflow.autolog()}.
 
@@ -844,10 +974,11 @@ This project demonstrated how modern data engineering concepts (Lakehouse, Delta
 \textbf{Component} & \textbf{Result} \\
 \midrule
 Medallion Architecture & Bronze/Silver/Gold layers implemented \\
-Data Processing & 29 809 matches, 8 456 players processed \\
+Data Processing & 29,809 matches, 8,456 players processed \\
 Streaming Simulation & 10 mini-batches written to Bronze \\
 Gold Tables & 4 analytical tables (813 players, 123 heroes) \\
-ML Model & Random Forest with 87.34\% accuracy \\
+Hyperparameter Tuning & 9 combinations tested with 5-Fold CV \\
+ML Model & Random Forest with 87.93\% accuracy \\
 Meta Analysis & Classification of heroes into 5 tiers \\
 \bottomrule
 \end{tabular}
@@ -1020,7 +1151,87 @@ SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection{ML Model Source Code}
+\subsection{ML Model Source Code (with Hyperparameter Tuning)}
+\label{appendix:ml}
+
+\begin{lstlisting}[language=Python, caption=Machine Learning pipeline with Grid Search and Cross-Validation]
+import mlflow
+import pandas as pd
+from pyspark.sql.functions import col
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.classification import RandomForestClassifier
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
+from pyspark.ml import Pipeline
+
+# Connection configuration
+storage_account = "dota2lakehousenew"
+container = "data"
+access_key = "***" # Key masked for security
+
+spark.conf.set(
+    f"fs.azure.account.key.{storage_account}.dfs.core.windows.net",
+    access_key)
+
+# Load Gold data
+gold_path = f"abfss://{container}@{storage_account}.dfs.core.windows.net/gold/ml_features"
+df = spark.read.format("delta").load(gold_path)
+
+# Feature selection
+selected_cols = ["kills", "deaths", "assists", "gold_per_min", 
+    "xp_per_min", "hero_damage", "tower_damage", "last_hits", 
+    "level", "duration_minutes", "win"]
+data = df.select(selected_cols).dropna()
+
+# Train/Test Split
+train_data, test_data = data.randomSplit([0.8, 0.2], seed=42)
+
+# ML Pipeline
+feature_cols = [c for c in selected_cols if c != "win"]
+assembler = VectorAssembler(inputCols=feature_cols, outputCol="features")
+rf = RandomForestClassifier(labelCol="win", featuresCol="features", seed=42)
+pipeline = Pipeline(stages=[assembler, rf])
+
+# Grid Search - Parameter grid definition
+paramGrid = ParamGridBuilder() \
+    .addGrid(rf.numTrees, [30, 50, 100]) \
+    .addGrid(rf.maxDepth, [5, 10, 15]) \
+    .build()
+
+# Evaluator
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="win", predictionCol="prediction", metricName="accuracy")
+
+# Cross-Validator (5-Fold)
+crossValidator = CrossValidator(
+    estimator=pipeline,
+    estimatorParamMaps=paramGrid,
+    evaluator=evaluator,
+    numFolds=5,
+    seed=42)
+
+# Training with MLflow tracking
+mlflow.autolog()
+cvModel = crossValidator.fit(train_data)
+bestModel = cvModel.bestModel
+bestRF = bestModel.stages[-1]
+
+# Display results
+print(f"Best params: numTrees={bestRF.getNumTrees}, maxDepth={bestRF.getMaxDepth()}")
+
+# Final evaluation
+predictions = bestModel.transform(test_data)
+accuracy = evaluator.evaluate(predictions)
+print(f"Accuracy: {accuracy*100:.2f}%")
+
+# Feature Importance
+importances = bestRF.featureImportances.toArray()
+df_importance = pd.DataFrame({
+    "Feature": feature_cols,
+    "Importance": importances
+}).sort_values("Importance", ascending=False)
+print(df_importance)
+\end{lstlisting}
 \label{appendix:ml}
 
 \begin{lstlisting}[language=Python, caption=Complete Machine Learning pipeline]
