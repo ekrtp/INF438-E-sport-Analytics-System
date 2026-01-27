@@ -874,13 +874,13 @@ Azure ekosistemi tarafından sunulan entegre hizmetler, uçtan uca veri çözüm
 
 \newpage
 \appendix
-\section*{EKLER}
+\section{EKLER}
 \addcontentsline{toc}{section}{Ekler}
 
-\subsection*{Databricks Notebook Kaynak Kodları}
+\subsection{Databricks Notebook Kaynak Kodları}
 \label{appendix:notebooks}
 
-\subsubsection*{setup\_connection.ipynb}
+\subsubsection{setup\_connection.ipynb}
 
 \begin{lstlisting}[language=Python, caption=Azure ADLS Gen2 Bağlantı Testi]
 # Notebook: setup_connection
@@ -904,7 +904,7 @@ for f in dbutils.fs.ls(BRONZE):
   print(f"  {f.name} ({f.size/1024/1024:.2f} MB)")
 \end{lstlisting}
 
-\subsubsection*{01\_bronze\_to\_silver.ipynb (Extraits)}
+\subsubsection{01\_bronze\_to\_silver.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Veri Yükleme ve Temizleme]
 from pyspark.sql.functions import *
@@ -928,7 +928,7 @@ df_matches_clean.write.format("delta").mode("overwrite") \
   .save(f"{SILVER}/cleaned_matches")
 \end{lstlisting}
 
-\subsubsection*{02\_silver\_to\_gold.ipynb (Extraits)}
+\subsubsection{02\_silver\_to\_gold.ipynb (Extraits)}
 
 \begin{lstlisting}[language=Python, caption=Gold Tablolarının Oluşturulması]
 df_player_stats = df_players \
@@ -954,7 +954,7 @@ df_hero = df_hero \
 \end{lstlisting}
 
 \newpage
-\subsection*{Streaming Simülatörü Kaynak Kodu}
+\subsection{Streaming Simülatörü Kaynak Kodu}
 \label{appendix:streaming}
 
 \begin{lstlisting}[language=Python, caption=stream\_simulator.py - Streaming Simülatörü]
@@ -1005,7 +1005,7 @@ if __name__ == "__main__":
 \end{lstlisting}
 
 \newpage
-\subsection*{Tablo Oluşturma SQL Komutları}
+\subsection{Tablo Oluşturma SQL Komutları}
 \label{appendix:sql}
 
 \begin{lstlisting}[language=SQL, caption=Şema ve Gold Tablolarının Oluşturulması]
@@ -1026,7 +1026,7 @@ SHOW TABLES IN esports_gold;
 \end{lstlisting}
 
 \newpage
-\subsection*{ML Model Kaynak Kodu}
+\subsection{ML Model Kaynak Kodu}
 \label{appendix:ml}
 
 \begin{lstlisting}[language=Python, caption=Tam Makine Öğrenmesi Pipeline'ı]
@@ -1063,7 +1063,7 @@ print(df_imp.sort_values("Importance", ascending=False))
 \end{lstlisting}
 
 \newpage
-\subsection*{Kullanılan Teknolojiler}
+\subsection{Kullanılan Teknolojiler}
 \label{appendix:technologies}
 
 \begin{table}[H]
