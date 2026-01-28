@@ -137,10 +137,10 @@ Run notebooks in the following order:
 ---
 
 ## 👥 Team Responsibilities
-Member 1 (Infrastructure): Azure Setup, Streaming Script, Batch Ingestion (Bronze).
+Emirhan Karatepe (Infrastructure): Azure Setup, Streaming Script, Batch Ingestion (Bronze).
 
-Member 2 (Data Engineering): Bronze to Silver/Gold Transformation (Databricks/PySpark).
+Kaan Çolakoğlu (Data Engineering): Bronze to Silver/Gold Transformation (Databricks/PySpark).
 
-Member 3 (Analytics): SQL Analysis & Power BI Dashboard.
+Ceren Akbaş (Analytics): SQL Analysis & Power BI Dashboard.
 
-Member 4 (ML & Report): Machine Learning Model & Final Documentation.
+Sabri Taner Burak Altındal (ML & Report): Machine Learning Model & Final Documentation.
